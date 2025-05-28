@@ -3,8 +3,12 @@ import { Factory } from "./_generated/your-stable/factory/structs";
 import { phantom } from "./_generated/_framework/reified";
 import {
   BUCKET_PROTOCOL_SHARED_OBJECT_REF,
+  FACTORY_REGISTRY_SHARED_OBJECT_REF,
+  FLASK_SHARED_OBJECT_REF,
+  FOUNTAIN_SHARED_OBJECT_REF,
+  SAVING_VAULT_STRATEGY_SHARED_OBJECT_REF,
   ST_SBUCK_VAULT_SHARED_OBJECT_REF,
-  YOUR_STABLE_PACKAGE_ADMIN_CAP,
+  YOUR_STABLE_PACKAGE_UPGRADE_CAP,
 } from "./lib/constant";
 import { getLatestPackageId } from "./utils/package";
 import { setPublishedAt } from "./_generated/your-stable";
@@ -14,6 +18,7 @@ import {
   fromUnderlyingAmount,
   getRewardsValue,
   mint,
+  new_,
   setBasicLimit,
   setExtensionLimit,
   toUnderlyingAmount,
@@ -21,10 +26,12 @@ import {
 } from "./_generated/your-stable/factory/functions";
 import {
   Transaction,
+  type TransactionArgument,
   type TransactionObjectInput,
 } from "@mysten/sui/transactions";
 import { devInspectTransaction } from "./utils/transaction";
 import { bcs } from "@mysten/sui/bcs";
+import { create } from "./_generated/your-stable/redemption-queue/functions";
 
 export class YourStableClient {
   factory: Factory<string>;
@@ -49,7 +56,7 @@ export class YourStableClient {
 
     const latestPackageId = await getLatestPackageId(
       client,
-      YOUR_STABLE_PACKAGE_ADMIN_CAP,
+      YOUR_STABLE_PACKAGE_UPGRADE_CAP,
     );
 
     if (latestPackageId)
@@ -59,7 +66,7 @@ export class YourStableClient {
     return new YourStableClient(client, factory);
   }
 
-  // --- Move call ---
+  // --- Getter ---
   getUnderlyingSTSBUCKBalance() {
     return this.factory.underlyingBalance.value;
   }
@@ -150,6 +157,37 @@ export class YourStableClient {
   }
 
   // --- Move call ---
+  createFactoryMoveCall(
+    tx: Transaction,
+    yourStableType: string,
+    treasuryCapId: string,
+    metadataObjectId: string,
+    limit: bigint,
+  ) {
+    const [factory, factoryCap] = new_(tx, yourStableType, {
+      registry: tx.sharedObjectRef(FACTORY_REGISTRY_SHARED_OBJECT_REF),
+      treasuryCap: tx.object(treasuryCapId),
+      coinMetadata: tx.object(metadataObjectId),
+      limit: tx.pure.u64(limit),
+    });
+
+    return [factory, factoryCap];
+  }
+
+  CreateRedemptionQueueMoveCall(
+    tx: Transaction,
+    stableCoinType: string,
+    ruleType: string,
+    adminCap: TransactionObjectInput,
+    delay: bigint | TransactionArgument,
+    redeemer: string | TransactionArgument | null,
+  ) {
+    create(tx, [stableCoinType, ruleType], {
+      adminCap,
+      delay,
+      redeemer,
+    });
+  }
 
   mintYourStableMoveCall(
     tx: Transaction,
@@ -175,19 +213,31 @@ export class YourStableClient {
     tx: Transaction,
     redeemedStableCoinType: string,
     yourStableCoin: TransactionObjectInput,
+    redeemedAmount: bigint,
+    recipient: string,
+    // TODO:
+    redemptionQueueId: string,
   ) {
-    const [withdrawTicket, redeemRequest] = burn(
+    const buckCoin = burn(
       tx,
       [redeemedStableCoinType, this.factory.$typeArgs[0]],
       {
         factory: tx.object(this.factory.id),
+        // TODO: use sharedObjectRef input
+        queue: tx.object(redemptionQueueId),
+        bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
         vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
+        flask: tx.sharedObjectRef(FLASK_SHARED_OBJECT_REF),
+        fountain: tx.sharedObjectRef(FOUNTAIN_SHARED_OBJECT_REF),
+        strategy: tx.sharedObjectRef(SAVING_VAULT_STRATEGY_SHARED_OBJECT_REF),
         clock: tx.object.clock(),
+        redeemedAmount: tx.pure.u64(redeemedAmount),
+        recipient: tx.pure.address(recipient),
         yourStableCoin,
       },
     );
 
-    return [withdrawTicket, redeemRequest];
+    return buckCoin;
   }
 
   // --> admin

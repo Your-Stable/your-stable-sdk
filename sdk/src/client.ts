@@ -157,7 +157,7 @@ export class YourStableClient {
   }
 
   // --- Move call ---
-  createFactoryMoveCall(
+  static createFactoryMoveCall(
     tx: Transaction,
     yourStableType: string,
     treasuryCapId: string,
@@ -174,7 +174,7 @@ export class YourStableClient {
     return [factory, factoryCap];
   }
 
-  CreateRedemptionQueueMoveCall(
+  static CreateRedemptionQueueMoveCall(
     tx: Transaction,
     stableCoinType: string,
     ruleType: string,

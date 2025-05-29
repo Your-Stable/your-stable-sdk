@@ -43,22 +43,28 @@ jobs:
         run: bun run release
       - name: Bump versions
         run: |
-          # Get new version without actually bumping
-          NEW_VERSION=$(npm version ${{ inputs.versionBumpType }} --no-git-tag-version --preid=temp)
-          # Revert the temp version bump
-          git checkout package.json
-          # Update both package.json files without creating git tags
-          jq ".version = \"${NEW_VERSION#v}\"" package.json > temp.json && mv temp.json package.json
-          cd dist && jq ".version = \"${NEW_VERSION#v}\"" package.json > temp.json && mv temp.json package.json
+          # Get current version
+          CURRENT_VERSION=$(jq -r .version package.json)
+          # Calculate new version using semver.sh
+          NEW_VERSION=$(echo "$CURRENT_VERSION" | awk -F. -v type=${{ inputs.versionBumpType }} '
+            type=="major" {print $1+1".0.0"}
+            type=="minor" {print $1"."$2+1".0"}
+            type=="patch" {print $1"."$2"."$3+1}
+          ')
+          # Update both package.json files
+          jq ".version = \"$NEW_VERSION\"" package.json > temp.json && mv temp.json package.json
+          cd dist && jq ".version = \"$NEW_VERSION\"" package.json > temp.json && mv temp.json package.json
+          echo "Version bumped from $CURRENT_VERSION to $NEW_VERSION"
       - name: Publish package
         run: |
-          echo "Publishing version: $(cat package.json | jq -r .version)"
-          npm publish --provenance
+          VERSION=$(jq -r .version package.json)
+          echo "Publishing version: $VERSION"
+          cd dist && npm publish --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - id: publish
         name: Output variables
-        run: echo "latest-version=$(npm view your-stable-sdk version)" >> "$GITHUB_OUTPUT"
+        run: echo "latest-version=$(cat package.json | jq -r .version)" >> "$GITHUB_OUTPUT"
       - name: Commit change
         uses: stefanzweifel/git-auto-commit-action@v5
         with:

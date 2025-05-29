@@ -1,0 +1,9 @@
+name: Deploy Vite App
+
+on:
+  push:
+    branches:
+      - develop # Change this to your branch name
+    paths:
+      - 'your-stable-app/**'
+

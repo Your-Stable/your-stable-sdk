@@ -11,8 +11,10 @@ import IndexPage from '~~/dapp/pages/IndexPage'
 import ThemeProvider from '~~/providers/ThemeProvider'
 import '~~/styles/index.css'
 import { ENetwork } from '~~/types/ENetwork'
+import { QueryClient } from '@tanstack/react-query'
 
 const themeSettings = getThemeSettings()
+export const queryClient = new QueryClient()
 
 const App: FC = () => {
   const { networkConfig } = useNetworkConfig()
@@ -26,6 +28,7 @@ const App: FC = () => {
           walletAutoConnect={false}
           walletStashedName={APP_NAME}
           themeSettings={themeSettings}
+          customQueryClient={queryClient}
         >
           <BrowserRouter>
             <Routes>

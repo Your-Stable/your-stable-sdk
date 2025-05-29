@@ -9,7 +9,6 @@
     "url": "https://github.com/Your-Stable/your-stable-sdk"
   },
   "main": "./dist/index.js",
-  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",

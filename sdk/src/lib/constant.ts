@@ -25,8 +25,8 @@ export const REDEMPTION_QUEUE: Record<
 > = {
   USDC: {
     objectId:
-      "0xaf47c69162f55445f4e8b969f8c04bff985c364cd873ba5555580219b2c5dec3",
-    initialSharedVersion: 566595435,
+      "0x5e5aebbe6ac58510e13e5099eb69530590956ab121ee8d9bb544749126c44da7",
+    initialSharedVersion: 566595436,
     mutable: true,
   },
 };

@@ -3,13 +3,16 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "pino-pretty": "^13.0.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
     "@mysten/sui": "^1.24.0",
-    "your-stable-sdk": "^0.1.0"
+    "pino": "^9.7.0",
+    "dotenv": "^16.5.0",
+    "your-stable-sdk": "link:your-stable-sdk"
   }
 }

@@ -3,11 +3,14 @@ import { Factory } from "./_generated/your-stable/factory/structs";
 import { phantom } from "./_generated/_framework/reified";
 import {
   BUCKET_PROTOCOL_SHARED_OBJECT_REF,
+  COIN_TYPE_LIST,
   FACTORY_REGISTRY_SHARED_OBJECT_REF,
   FLASK_SHARED_OBJECT_REF,
   FOUNTAIN_SHARED_OBJECT_REF,
+  REDEMPTION_QUEUE,
   SAVING_VAULT_STRATEGY_SHARED_OBJECT_REF,
   ST_SBUCK_VAULT_SHARED_OBJECT_REF,
+  type SUPPORTED_REDEMPTION_COIN,
   YOUR_STABLE_PACKAGE_UPGRADE_CAP,
 } from "./lib/constant";
 import { getLatestPackageId } from "./utils/package";
@@ -36,7 +39,7 @@ import { create } from "./_generated/your-stable/redemption-queue/functions";
 export class YourStableClient {
   factory: Factory<string>;
   client: SuiClient;
-  underlyingDecimal = 9;
+  static underlyingDecimal = 9;
 
   constructor(client: SuiClient, factory: Factory<string>) {
     this.factory = factory;
@@ -211,20 +214,19 @@ export class YourStableClient {
 
   burnYourStableMoveCall(
     tx: Transaction,
-    redeemedStableCoinType: string,
+    yourStableCoinType: string,
     yourStableCoin: TransactionObjectInput,
-    redeemedAmount: bigint,
+    redeemedStableCoin: SUPPORTED_REDEMPTION_COIN,
     recipient: string,
-    // TODO:
-    redemptionQueueId: string,
+    redeemedAmount: bigint,
   ) {
     const buckCoin = burn(
       tx,
-      [redeemedStableCoinType, this.factory.$typeArgs[0]],
+      [COIN_TYPE_LIST[redeemedStableCoin], yourStableCoinType],
       {
         factory: tx.object(this.factory.id),
         // TODO: use sharedObjectRef input
-        queue: tx.object(redemptionQueueId),
+        queue: tx.sharedObjectRef(REDEMPTION_QUEUE[redeemedStableCoin]),
         bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
         vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
         flask: tx.sharedObjectRef(FLASK_SHARED_OBJECT_REF),

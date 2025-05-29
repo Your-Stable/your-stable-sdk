@@ -8,7 +8,6 @@ import {
 } from "your-stable-sdk";
 import { loadSigner, logger } from ".";
 import { Factory } from "your-stable-sdk/_generated/factory/structs.js";
-import { normalizeStructTag } from "@mysten/sui/utils";
 import { getInputCoins } from "./utils";
 
 const suiClient = new SuiClient({ url: getFullnodeUrl("mainnet") });
@@ -76,13 +75,9 @@ export async function mintYourStable() {
   const yourStableCoinType =
     "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
 
-  const factoryId =
-    "0x244ddb00897dd5747089530f34f7f62bfd38b4c24fab2e7c483150db5305c047";
-
   // create Factory instance
   const factory = await YourStableClient.initialize(
     suiClient,
-    factoryId,
     yourStableCoinType,
   );
 
@@ -129,13 +124,9 @@ export async function burnYourStable() {
   const yourStableCoinType =
     "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
 
-  const factoryId =
-    "0x244ddb00897dd5747089530f34f7f62bfd38b4c24fab2e7c483150db5305c047";
-
   // create Factory instance
   const factory = await YourStableClient.initialize(
     suiClient,
-    factoryId,
     yourStableCoinType,
   );
 
@@ -153,10 +144,9 @@ export async function burnYourStable() {
     BigInt(burnedAmount),
   );
   // stableCoin Amount to redeem
-  const redeemedAmount = BigInt(0)
+  const redeemedAmount = BigInt(burnedAmount);
   const buckCoin = factory.burnYourStableMoveCall(
     tx,
-    yourStableCoinType,
     yourStableCoin,
     "USDC",
     signer.toSuiAddress(),
@@ -169,16 +159,37 @@ export async function burnYourStable() {
   logger.info({ dryRunResponse });
 
   if (dryRunResponse.dryrunRes.effects.status.status === "success") {
-    // execute transaction if it's proper
-    // const response = await suiClient.signAndExecuteTransaction({
-    //   transaction: tx,
-    //   signer,
-    // });
+    //execute transaction if it's proper
+    const response = await suiClient.signAndExecuteTransaction({
+      transaction: tx,
+      signer,
+    });
 
-    // logger.info({ response });
+    logger.info({ response });
   } else {
     logger.error(dryRunResponse.dryrunRes.effects.status.error);
   }
 }
 
-burnYourStable().catch(console.error);
+async function getYourStableFactory() {
+  const yourStableCoinType =
+    "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
+
+  // create Factory instance
+  const factory = await YourStableClient.initialize(
+    suiClient,
+    yourStableCoinType,
+  );
+
+  const underlyingSTSBUCKReserve = await factory.getUnderlyingSTSBUCKBalance();
+  const rewardSTSBuckAmount = await factory.getRewardsSTSBuckAmount();
+  const rewardsBuckAmount = await factory.getRewardsBuckAmount();
+
+  logger.info({
+    underlyingSTSBUCKReserve,
+    rewardSTSBuckAmount,
+    rewardsBuckAmount,
+  });
+}
+
+getYourStableFactory().catch(console.error);

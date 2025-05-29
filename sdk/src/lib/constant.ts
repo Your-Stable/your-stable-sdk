@@ -10,6 +10,26 @@ export const FACTORY_REGISTRY_SHARED_OBJECT_REF = {
   mutable: true,
 };
 
+export type SUPPORTED_REDEMPTION_COIN = "USDC";
+
+export const COIN_TYPE_LIST: Record<SUPPORTED_REDEMPTION_COIN, string> = {
+  USDC: "0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC",
+};
+export const REDEMPTION_QUEUE: Record<
+  SUPPORTED_REDEMPTION_COIN,
+  {
+    objectId: string;
+    initialSharedVersion: number;
+    mutable: boolean;
+  }
+> = {
+  USDC: {
+    objectId:
+      "0xaf47c69162f55445f4e8b969f8c04bff985c364cd873ba5555580219b2c5dec3",
+    initialSharedVersion: 566595435,
+    mutable: true,
+  },
+};
 
 export const ST_SBUCK_VAULT_SHARED_OBJECT_REF = {
   objectId:

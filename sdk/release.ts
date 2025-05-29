@@ -1,6 +1,6 @@
 import fs from "fs";
 
-const NAME = "@sui-your-stable/your-stable-sdk";
+const NAME = "your-stable-sdk";
 
 // 1. Update package.json
 import packageJson from "./package.json";

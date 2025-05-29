@@ -1,275 +1,80 @@
 import * as reified from "../../../../_framework/reified";
-import type {
-  PhantomReified,
-  Reified,
-  StructClass,
-  ToField,
-  ToTypeArgument,
-  ToTypeStr,
-  TypeArgument} from "../../../../_framework/reified";
-import {
-  assertFieldsWithTypesArgsMatch,
-  assertReifiedTypeArgsMatch,
-  decodeFromFields,
-  decodeFromFieldsWithTypes,
-  decodeFromJSONField,
-  extractType,
-  fieldToJSON,
-  phantom,
-  toBcs,
-} from "../../../../_framework/reified";
-import type {
-  FieldsWithTypes} from "../../../../_framework/util";
-import {
-  composeSuiType,
-  compressSuiType,
-  parseTypeName,
-} from "../../../../_framework/util";
-import type { Vector } from "../../../../_framework/vector";
-import { PKG_V34 } from "../index";
-import type { BcsType} from "@mysten/sui/bcs";
-import { bcs } from "@mysten/sui/bcs";
-import type { SuiClient, SuiObjectData, SuiParsedData } from "@mysten/sui/client";
-import { fromB64 } from "@mysten/sui/utils";
+import {PhantomReified, Reified, StructClass, ToField, ToTypeArgument, ToTypeStr, TypeArgument, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, fieldToJSON, phantom, toBcs} from "../../../../_framework/reified";
+import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../../../_framework/util";
+import {Vector} from "../../../../_framework/vector";
+import {PKG_V34} from "../index";
+import {BcsType, bcs} from "@mysten/sui/bcs";
+import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
+import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== VecSet =============================== */
 
-export function isVecSet(type: string): boolean {
-  type = compressSuiType(type);
-  return type.startsWith(`${PKG_V34}::vec_set::VecSet` + "<");
-}
+export function isVecSet(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V34}::vec_set::VecSet` + '<'); }
 
-export interface VecSetFields<K extends TypeArgument> {
-  contents: ToField<Vector<K>>;
-}
+export interface VecSetFields<K extends TypeArgument> { contents: ToField<Vector<K>> }
 
-export type VecSetReified<K extends TypeArgument> = Reified<
-  VecSet<K>,
-  VecSetFields<K>
->;
+export type VecSetReified<K extends TypeArgument> = Reified< VecSet<K>, VecSetFields<K> >;
 
-export class VecSet<K extends TypeArgument> implements StructClass {
-  __StructClass = true as const;
+export class VecSet<K extends TypeArgument> implements StructClass { __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V34}::vec_set::VecSet`;
-  static readonly $numTypeParams = 1;
-  static readonly $isPhantom = [false] as const;
+ static readonly $typeName = `${PKG_V34}::vec_set::VecSet`; static readonly $numTypeParams = 1; static readonly $isPhantom = [false,] as const;
 
-  readonly $typeName = VecSet.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V34}::vec_set::VecSet<${ToTypeStr<K>}>`;
-  readonly $typeArgs: [ToTypeStr<K>];
-  readonly $isPhantom = VecSet.$isPhantom;
+ readonly $typeName = VecSet.$typeName; readonly $fullTypeName: `${typeof PKG_V34}::vec_set::VecSet<${ToTypeStr<K>}>`; readonly $typeArgs: [ToTypeStr<K>]; readonly $isPhantom = VecSet.$isPhantom;
 
-  readonly contents: ToField<Vector<K>>;
+ readonly contents: ToField<Vector<K>>
 
-  private constructor(typeArgs: [ToTypeStr<K>], fields: VecSetFields<K>) {
-    this.$fullTypeName = composeSuiType(
-      VecSet.$typeName,
-      ...typeArgs,
-    ) as `${typeof PKG_V34}::vec_set::VecSet<${ToTypeStr<K>}>`;
-    this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [ToTypeStr<K>], fields: VecSetFields<K>, ) { this.$fullTypeName = composeSuiType( VecSet.$typeName, ...typeArgs ) as `${typeof PKG_V34}::vec_set::VecSet<${ToTypeStr<K>}>`; this.$typeArgs = typeArgs;
 
-    this.contents = fields.contents;
-  }
+ this.contents = fields.contents; }
 
-  static reified<K extends Reified<TypeArgument, any>>(
-    K: K,
-  ): VecSetReified<ToTypeArgument<K>> {
-    return {
-      typeName: VecSet.$typeName,
-      fullTypeName: composeSuiType(
-        VecSet.$typeName,
-        ...[extractType(K)],
-      ) as `${typeof PKG_V34}::vec_set::VecSet<${ToTypeStr<ToTypeArgument<K>>}>`,
-      typeArgs: [extractType(K)] as [ToTypeStr<ToTypeArgument<K>>],
-      isPhantom: VecSet.$isPhantom,
-      reifiedTypeArgs: [K],
-      fromFields: (fields: Record<string, any>) => VecSet.fromFields(K, fields),
-      fromFieldsWithTypes: (item: FieldsWithTypes) =>
-        VecSet.fromFieldsWithTypes(K, item),
-      fromBcs: (data: Uint8Array) => VecSet.fromBcs(K, data),
-      bcs: VecSet.bcs(toBcs(K)),
-      fromJSONField: (field: any) => VecSet.fromJSONField(K, field),
-      fromJSON: (json: Record<string, any>) => VecSet.fromJSON(K, json),
-      fromSuiParsedData: (content: SuiParsedData) =>
-        VecSet.fromSuiParsedData(K, content),
-      fromSuiObjectData: (content: SuiObjectData) =>
-        VecSet.fromSuiObjectData(K, content),
-      fetch: async (client: SuiClient, id: string) =>
-        VecSet.fetch(client, K, id),
-      new: (fields: VecSetFields<ToTypeArgument<K>>) => {
-        return new VecSet([extractType(K)], fields);
-      },
-      kind: "StructClassReified",
-    };
-  }
+ static reified<K extends Reified<TypeArgument, any>>( K: K ): VecSetReified<ToTypeArgument<K>> { return { typeName: VecSet.$typeName, fullTypeName: composeSuiType( VecSet.$typeName, ...[extractType(K)] ) as `${typeof PKG_V34}::vec_set::VecSet<${ToTypeStr<ToTypeArgument<K>>}>`, typeArgs: [ extractType(K) ] as [ToTypeStr<ToTypeArgument<K>>], isPhantom: VecSet.$isPhantom, reifiedTypeArgs: [K], fromFields: (fields: Record<string, any>) => VecSet.fromFields( K, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => VecSet.fromFieldsWithTypes( K, item, ), fromBcs: (data: Uint8Array) => VecSet.fromBcs( K, data, ), bcs: VecSet.bcs(toBcs(K)), fromJSONField: (field: any) => VecSet.fromJSONField( K, field, ), fromJSON: (json: Record<string, any>) => VecSet.fromJSON( K, json, ), fromSuiParsedData: (content: SuiParsedData) => VecSet.fromSuiParsedData( K, content, ), fromSuiObjectData: (content: SuiObjectData) => VecSet.fromSuiObjectData( K, content, ), fetch: async (client: SuiClient, id: string) => VecSet.fetch( client, K, id, ), new: ( fields: VecSetFields<ToTypeArgument<K>>, ) => { return new VecSet( [extractType(K)], fields ) }, kind: "StructClassReified", } }
 
-  static get r() {
-    return VecSet.reified;
-  }
+ static get r() { return VecSet.reified }
 
-  static phantom<K extends Reified<TypeArgument, any>>(
-    K: K,
-  ): PhantomReified<ToTypeStr<VecSet<ToTypeArgument<K>>>> {
-    return phantom(VecSet.reified(K));
-  }
-  static get p() {
-    return VecSet.phantom;
-  }
+ static phantom<K extends Reified<TypeArgument, any>>( K: K ): PhantomReified<ToTypeStr<VecSet<ToTypeArgument<K>>>> { return phantom(VecSet.reified( K )); } static get p() { return VecSet.phantom }
 
-  static get bcs() {
-    return <K extends BcsType<any>>(K: K) =>
-      bcs.struct(`VecSet<${K.name}>`, {
-        contents: bcs.vector(K),
-      });
-  }
+ static get bcs() { return <K extends BcsType<any>>(K: K) => bcs.struct(`VecSet<${K.name}>`, {
 
-  static fromFields<K extends Reified<TypeArgument, any>>(
-    typeArg: K,
-    fields: Record<string, any>,
-  ): VecSet<ToTypeArgument<K>> {
-    return VecSet.reified(typeArg).new({
-      contents: decodeFromFields(reified.vector(typeArg), fields.contents),
-    });
-  }
+ contents: bcs.vector(K)
 
-  static fromFieldsWithTypes<K extends Reified<TypeArgument, any>>(
-    typeArg: K,
-    item: FieldsWithTypes,
-  ): VecSet<ToTypeArgument<K>> {
-    if (!isVecSet(item.type)) {
-      throw new Error("not a VecSet type");
-    }
-    assertFieldsWithTypesArgsMatch(item, [typeArg]);
+}) };
 
-    return VecSet.reified(typeArg).new({
-      contents: decodeFromFieldsWithTypes(
-        reified.vector(typeArg),
-        item.fields.contents,
-      ),
-    });
-  }
+ static fromFields<K extends Reified<TypeArgument, any>>( typeArg: K, fields: Record<string, any> ): VecSet<ToTypeArgument<K>> { return VecSet.reified( typeArg, ).new( { contents: decodeFromFields(reified.vector(typeArg), fields.contents) } ) }
 
-  static fromBcs<K extends Reified<TypeArgument, any>>(
-    typeArg: K,
-    data: Uint8Array,
-  ): VecSet<ToTypeArgument<K>> {
-    const typeArgs = [typeArg];
+ static fromFieldsWithTypes<K extends Reified<TypeArgument, any>>( typeArg: K, item: FieldsWithTypes ): VecSet<ToTypeArgument<K>> { if (!isVecSet(item.type)) { throw new Error("not a VecSet type");
 
-    return VecSet.fromFields(
-      typeArg,
-      VecSet.bcs(toBcs(typeArgs[0])).parse(data),
-    );
-  }
+ } assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
-  toJSONField() {
-    return {
-      contents: fieldToJSON<Vector<K>>(
-        `vector<${this.$typeArgs[0]}>`,
-        this.contents,
-      ),
-    };
-  }
+ return VecSet.reified( typeArg, ).new( { contents: decodeFromFieldsWithTypes(reified.vector(typeArg), item.fields.contents) } ) }
 
-  toJSON() {
-    return {
-      $typeName: this.$typeName,
-      $typeArgs: this.$typeArgs,
-      ...this.toJSONField(),
-    };
-  }
+ static fromBcs<K extends Reified<TypeArgument, any>>( typeArg: K, data: Uint8Array ): VecSet<ToTypeArgument<K>> { const typeArgs = [typeArg];
 
-  static fromJSONField<K extends Reified<TypeArgument, any>>(
-    typeArg: K,
-    field: any,
-  ): VecSet<ToTypeArgument<K>> {
-    return VecSet.reified(typeArg).new({
-      contents: decodeFromJSONField(reified.vector(typeArg), field.contents),
-    });
-  }
+ return VecSet.fromFields( typeArg, VecSet.bcs( toBcs(typeArgs[0]) ).parse(data) ) }
 
-  static fromJSON<K extends Reified<TypeArgument, any>>(
-    typeArg: K,
-    json: Record<string, any>,
-  ): VecSet<ToTypeArgument<K>> {
-    if (json.$typeName !== VecSet.$typeName) {
-      throw new Error("not a WithTwoGenerics json object");
-    }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(VecSet.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg],
-    );
+ toJSONField() { return {
 
-    return VecSet.fromJSONField(typeArg, json);
-  }
+ contents: fieldToJSON<Vector<K>>(`vector<${this.$typeArgs[0]}>`, this.contents),
 
-  static fromSuiParsedData<K extends Reified<TypeArgument, any>>(
-    typeArg: K,
-    content: SuiParsedData,
-  ): VecSet<ToTypeArgument<K>> {
-    if (content.dataType !== "moveObject") {
-      throw new Error("not an object");
-    }
-    if (!isVecSet(content.type)) {
-      throw new Error(
-        `object at ${(content.fields as any).id} is not a VecSet object`,
-      );
-    }
-    return VecSet.fromFieldsWithTypes(typeArg, content);
-  }
+} }
 
-  static fromSuiObjectData<K extends Reified<TypeArgument, any>>(
-    typeArg: K,
-    data: SuiObjectData,
-  ): VecSet<ToTypeArgument<K>> {
-    if (data.bcs) {
-      if (data.bcs.dataType !== "moveObject" || !isVecSet(data.bcs.type)) {
-        throw new Error(`object at is not a VecSet object`);
-      }
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
-      const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
-      if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`,
-        );
-      }
-      const gotTypeArg = compressSuiType(gotTypeArgs[0]);
-      const expectedTypeArg = compressSuiType(extractType(typeArg));
-      if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`,
-        );
-      }
+ static fromJSONField<K extends Reified<TypeArgument, any>>( typeArg: K, field: any ): VecSet<ToTypeArgument<K>> { return VecSet.reified( typeArg, ).new( { contents: decodeFromJSONField(reified.vector(typeArg), field.contents) } ) }
 
-      return VecSet.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
-    }
-    if (data.content) {
-      return VecSet.fromSuiParsedData(typeArg, data.content);
-    }
-    throw new Error(
-      "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.",
-    );
-  }
+ static fromJSON<K extends Reified<TypeArgument, any>>( typeArg: K, json: Record<string, any> ): VecSet<ToTypeArgument<K>> { if (json.$typeName !== VecSet.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(VecSet.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
 
-  static async fetch<K extends Reified<TypeArgument, any>>(
-    client: SuiClient,
-    typeArg: K,
-    id: string,
-  ): Promise<VecSet<ToTypeArgument<K>>> {
-    const res = await client.getObject({ id, options: { showBcs: true } });
-    if (res.error) {
-      throw new Error(
-        `error fetching VecSet object at id ${id}: ${res.error.code}`,
-      );
-    }
-    if (
-      res.data?.bcs?.dataType !== "moveObject" ||
-      !isVecSet(res.data.bcs.type)
-    ) {
-      throw new Error(`object at id ${id} is not a VecSet object`);
-    }
+ return VecSet.fromJSONField( typeArg, json, ) }
 
-    return VecSet.fromSuiObjectData(typeArg, res.data);
-  }
-}
+ static fromSuiParsedData<K extends Reified<TypeArgument, any>>( typeArg: K, content: SuiParsedData ): VecSet<ToTypeArgument<K>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isVecSet(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a VecSet object`); } return VecSet.fromFieldsWithTypes( typeArg, content ); }
+
+ static fromSuiObjectData<K extends Reified<TypeArgument, any>>( typeArg: K, data: SuiObjectData ): VecSet<ToTypeArgument<K>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isVecSet(data.bcs.type)) { throw new Error(`object at is not a VecSet object`); }
+
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
+
+ return VecSet.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return VecSet.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch<K extends Reified<TypeArgument, any>>( client: SuiClient, typeArg: K, id: string ): Promise<VecSet<ToTypeArgument<K>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching VecSet object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isVecSet(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a VecSet object`); }
+
+ return VecSet.fromSuiObjectData( typeArg, res.data ); }
+
+ }

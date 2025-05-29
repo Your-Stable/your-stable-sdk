@@ -11,50 +11,23 @@ import * as package_source_ce7ff77a83ea0cb6fd39bd8748e2ec89a3f41e8efdc3f4eb123e0
 import * as package_source_d01d27939064d79e4ae1179cd11cfeeff23943f32b1a842ea1a1e15a0045d77d from "../_dependencies/source/0xd01d27939064d79e4ae1179cd11cfeeff23943f32b1a842ea1a1e15a0045d77d/init";
 import * as package_source_db9a10bb9536ab367b7d1ffa404c1d6c55f009076df1139dc108dd86608bbe from "../_dependencies/source/0xdb9a10bb9536ab367b7d1ffa404c1d6c55f009076df1139dc108dd86608bbe/init";
 import * as package_source_f145ee6d09aae034924f80672bc76db2415dfd1b1bed863ac289af9d94e2c4fc from "../_dependencies/source/0xf145ee6d09aae034924f80672bc76db2415dfd1b1bed863ac289af9d94e2c4fc/init";
-import * as package_source_6d88a3ab42f802cee22c34fedbb06d0c6af72a4a79fd69896d3e65ddc825e3e7 from "../your-stable/init";
-import type { StructClassLoader } from "./loader";
+import * as package_source_5790373dae32f531d99449de51829ec593efb69f9e08b79b8aefc7935f8bd97c from "../your-stable/init";
+import {StructClassLoader} from "./loader";
 
-function registerClassesSource(loader: StructClassLoader) {
-  package_source_1.registerClasses(loader);
-  package_source_2.registerClasses(loader);
-  package_source_b53b0f4174108627fbee72e2498b58d6a2714cded53fac537034c220d26302.registerClasses(
-    loader,
-  );
-  package_source_db9a10bb9536ab367b7d1ffa404c1d6c55f009076df1139dc108dd86608bbe.registerClasses(
-    loader,
-  );
-  package_source_8d79f4d920b03d88faca1e421af023a87fbb1e4a6fd200248e6e9998d09e470.registerClasses(
-    loader,
-  );
-  package_source_1798f84ee72176114ddbf5525a6d964c5f8ea1b3738d08d50d0d3de4cf584884.registerClasses(
-    loader,
-  );
-  package_source_2a721777dc1fcf7cda19492ad7c2272ee284214652bde3e9740e2f49c3bff457.registerClasses(
-    loader,
-  );
-  package_source_5306f64e312b581766351c07af79c72fcb1cd25147157fdc2f8ad76de9a3fb6a.registerClasses(
-    loader,
-  );
-  package_source_5d8fbbf6f908a4af8c6d072669a462d53e03eb3c1d863bd0359dc818c69ea706.registerClasses(
-    loader,
-  );
-  package_source_6d88a3ab42f802cee22c34fedbb06d0c6af72a4a79fd69896d3e65ddc825e3e7.registerClasses(
-    loader,
-  );
-  package_source_75b23bde4de9aca930d8c1f1780aa65ee777d8b33c3045b053a178b452222e82.registerClasses(
-    loader,
-  );
-  package_source_ce7ff77a83ea0cb6fd39bd8748e2ec89a3f41e8efdc3f4eb123e0ca37b184db2.registerClasses(
-    loader,
-  );
-  package_source_d01d27939064d79e4ae1179cd11cfeeff23943f32b1a842ea1a1e15a0045d77d.registerClasses(
-    loader,
-  );
-  package_source_f145ee6d09aae034924f80672bc76db2415dfd1b1bed863ac289af9d94e2c4fc.registerClasses(
-    loader,
-  );
-}
+function registerClassesSource(loader: StructClassLoader) { package_source_1.registerClasses(loader);
+package_source_2.registerClasses(loader);
+package_source_b53b0f4174108627fbee72e2498b58d6a2714cded53fac537034c220d26302.registerClasses(loader);
+package_source_db9a10bb9536ab367b7d1ffa404c1d6c55f009076df1139dc108dd86608bbe.registerClasses(loader);
+package_source_8d79f4d920b03d88faca1e421af023a87fbb1e4a6fd200248e6e9998d09e470.registerClasses(loader);
+package_source_1798f84ee72176114ddbf5525a6d964c5f8ea1b3738d08d50d0d3de4cf584884.registerClasses(loader);
+package_source_2a721777dc1fcf7cda19492ad7c2272ee284214652bde3e9740e2f49c3bff457.registerClasses(loader);
+package_source_5306f64e312b581766351c07af79c72fcb1cd25147157fdc2f8ad76de9a3fb6a.registerClasses(loader);
+package_source_5790373dae32f531d99449de51829ec593efb69f9e08b79b8aefc7935f8bd97c.registerClasses(loader);
+package_source_5d8fbbf6f908a4af8c6d072669a462d53e03eb3c1d863bd0359dc818c69ea706.registerClasses(loader);
+package_source_75b23bde4de9aca930d8c1f1780aa65ee777d8b33c3045b053a178b452222e82.registerClasses(loader);
+package_source_ce7ff77a83ea0cb6fd39bd8748e2ec89a3f41e8efdc3f4eb123e0ca37b184db2.registerClasses(loader);
+package_source_d01d27939064d79e4ae1179cd11cfeeff23943f32b1a842ea1a1e15a0045d77d.registerClasses(loader);
+package_source_f145ee6d09aae034924f80672bc76db2415dfd1b1bed863ac289af9d94e2c4fc.registerClasses(loader);
+ }
 
-export function registerClasses(loader: StructClassLoader) {
-  registerClassesSource(loader);
-}
+export function registerClasses(loader: StructClassLoader) { registerClassesSource(loader); }

@@ -1,0 +1,5 @@
+[config]
+rpc = "https://fullnode.mainnet.sui.io:443"
+
+[packages]
+YourStable = { local = "../../../../../move/your-stable/" }

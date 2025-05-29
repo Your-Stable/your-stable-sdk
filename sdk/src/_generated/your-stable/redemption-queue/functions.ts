@@ -1,10 +1,10 @@
 import { PUBLISHED_AT } from "..";
 import { Option } from "../../_dependencies/source/0x1/option/structs";
-import { type GenericArg, generic, obj, pure } from "../../_framework/util";
+import { GenericArg, generic, obj, pure } from "../../_framework/util";
 import {
-  type Transaction,
-  type TransactionArgument,
-  type TransactionObjectInput,
+  Transaction,
+  TransactionArgument,
+  TransactionObjectInput,
 } from "@mysten/sui/transactions";
 
 export function errQueueIsNotActive(tx: Transaction) {
@@ -24,6 +24,20 @@ export function errExceedMaxAmountToRedeem(tx: Transaction) {
 export function errInvalidRedeemer(tx: Transaction) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::redemption_queue::err_invalid_redeemer`,
+    arguments: [],
+  });
+}
+
+export function errIndexExceedSize(tx: Transaction) {
+  return tx.moveCall({
+    target: `${PUBLISHED_AT}::redemption_queue::err_index_exceed_size`,
+    arguments: [],
+  });
+}
+
+export function errZeroBatchSize(tx: Transaction) {
+  return tx.moveCall({
+    target: `${PUBLISHED_AT}::redemption_queue::err_zero_batch_size`,
     arguments: [],
   });
 }
@@ -144,6 +158,28 @@ export function create(
     arguments: [
       obj(tx, args.adminCap),
       pure(tx, args.delay, `u64`),
+      pure(tx, args.redeemer, `${Option.$typeName}<address>`),
+    ],
+  });
+}
+
+export interface SetRedeemerArgs {
+  queue: TransactionObjectInput;
+  adminCap: TransactionObjectInput;
+  redeemer: string | TransactionArgument | TransactionArgument | null;
+}
+
+export function setRedeemer(
+  tx: Transaction,
+  typeArgs: [string, string],
+  args: SetRedeemerArgs,
+) {
+  return tx.moveCall({
+    target: `${PUBLISHED_AT}::redemption_queue::set_redeemer`,
+    typeArguments: typeArgs,
+    arguments: [
+      obj(tx, args.queue),
+      obj(tx, args.adminCap),
       pure(tx, args.redeemer, `${Option.$typeName}<address>`),
     ],
   });

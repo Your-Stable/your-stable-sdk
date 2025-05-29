@@ -1,10 +1,9 @@
-import type { BcsType } from "@mysten/sui/bcs";
-import { bcs } from "@mysten/sui/bcs";
-import type { Transaction } from "@mysten/sui/transactions";
+import { bcs, BcsType } from "@mysten/sui/bcs";
 import {
-  type TransactionArgument,
-  type TransactionObjectArgument,
-  type TransactionObjectInput,
+  Transaction,
+  TransactionArgument,
+  TransactionObjectArgument,
+  TransactionObjectInput,
 } from "@mysten/sui/transactions";
 
 export interface FieldsWithTypes {

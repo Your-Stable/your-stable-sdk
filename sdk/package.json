@@ -1,9 +1,13 @@
 {
   "name": "your-stable-sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "description": "A TypeScript SDK for interacting with the your-stable contract",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Your-Stable/your-stable-sdk"
+  },
   "main": "./dist/index.js",
   "exports": {
     ".": {

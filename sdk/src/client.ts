@@ -35,22 +35,43 @@ import {
 import { devInspectTransaction } from "./utils/transaction";
 import { bcs } from "@mysten/sui/bcs";
 import { create } from "./_generated/your-stable/redemption-queue/functions";
+import { normalizeStructTag } from "@mysten/sui/utils";
 
 export class YourStableClient {
   factory: Factory<string>;
+  factoryCap: string;
   client: SuiClient;
   static underlyingDecimal = 9;
 
-  constructor(client: SuiClient, factory: Factory<string>) {
+  constructor(client: SuiClient, factory: Factory<string>, factoryCap: string) {
     this.factory = factory;
+    this.factoryCap = factoryCap;
     this.client = client;
   }
 
-  static async initialize(
-    client: SuiClient,
-    factoryId: string,
-    factoryType: string,
-  ) {
+  static async initialize(client: SuiClient, factoryType: string) {
+    const factoryDynamicFieldKey = normalizeStructTag(factoryType).slice(2);
+    const suiObjectResponse = await client.getDynamicFieldObject({
+      parentId: FACTORY_REGISTRY_SHARED_OBJECT_REF.objectId,
+      name: {
+        type: "0x1::ascii::String",
+        value: factoryDynamicFieldKey,
+      },
+    });
+
+    if (suiObjectResponse.error)
+      throw new Error(`Wrong factoryType: ${factoryType}`);
+
+    const deploymentContent = suiObjectResponse.data?.content;
+
+    if (!deploymentContent || deploymentContent.dataType !== "moveObject")
+      throw new Error(
+        `Failed to get dynamic content for deployments for factoryType: ${factoryType}`,
+      );
+    const { factory_cap_id: factoryCapId, factory_id: factoryId } =
+      /* eslint-disable  @typescript-eslint/no-explicit-any */
+      (deploymentContent.fields as any).value.fields;
+
     const factory = await Factory.fetch(
       client,
       phantom(factoryType),
@@ -62,11 +83,9 @@ export class YourStableClient {
       YOUR_STABLE_PACKAGE_UPGRADE_CAP,
     );
 
-    if (latestPackageId)
-      console.log("@YourStable | latestPackageId:", latestPackageId);
     setPublishedAt(latestPackageId);
 
-    return new YourStableClient(client, factory);
+    return new YourStableClient(client, factory, factoryCapId);
   }
 
   // --- Getter ---
@@ -214,7 +233,6 @@ export class YourStableClient {
 
   burnYourStableMoveCall(
     tx: Transaction,
-    yourStableCoinType: string,
     yourStableCoin: TransactionObjectInput,
     redeemedStableCoin: SUPPORTED_REDEMPTION_COIN,
     recipient: string,
@@ -222,7 +240,7 @@ export class YourStableClient {
   ) {
     const buckCoin = burn(
       tx,
-      [COIN_TYPE_LIST[redeemedStableCoin], yourStableCoinType],
+      [COIN_TYPE_LIST[redeemedStableCoin], this.factory.$typeArgs[0]],
       {
         factory: tx.object(this.factory.id),
         // TODO: use sharedObjectRef input

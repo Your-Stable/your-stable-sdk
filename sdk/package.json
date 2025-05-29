@@ -10,9 +10,6 @@
   },
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist/**/*"
-  ],
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -31,7 +28,7 @@
     "eslint": "eslint --fix \"./src/**/*.ts\"",
     "prettier": "prettier --write \"./src/**/*\"",
     "lint": "bun eslint && bun prettier && bun tsc --noEmit",
-    "release": "bun run build && cd ./dist && npm publish --access public"
+    "release": "bun run build && bun ts-node ./release.ts"
   },
   "devDependencies": {
     "ts-node": "^10.9.2"

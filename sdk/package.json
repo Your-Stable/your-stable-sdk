@@ -1,6 +1,6 @@
 {
   "name": "your-stable-sdk",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": false,
   "description": "A TypeScript SDK for interacting with the your-stable contract",
   "license": "MIT",

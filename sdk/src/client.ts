@@ -17,6 +17,7 @@ import { getLatestPackageId } from "./utils/package";
 import { setPublishedAt } from "./_generated/your-stable";
 import {
   burn,
+  burnAndRedeem,
   claimReward,
   fromUnderlyingAmount,
   getRewardsValue,
@@ -235,15 +236,37 @@ export class YourStableClient {
     tx: Transaction,
     yourStableCoin: TransactionObjectInput,
     redeemedStableCoin: SUPPORTED_REDEMPTION_COIN,
-    recipient: string,
-    redeemedAmount: bigint,
   ) {
     const buckCoin = burn(
       tx,
       [COIN_TYPE_LIST[redeemedStableCoin], this.factory.$typeArgs[0]],
       {
         factory: tx.object(this.factory.id),
-        // TODO: use sharedObjectRef input
+        bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
+        vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
+        flask: tx.sharedObjectRef(FLASK_SHARED_OBJECT_REF),
+        fountain: tx.sharedObjectRef(FOUNTAIN_SHARED_OBJECT_REF),
+        strategy: tx.sharedObjectRef(SAVING_VAULT_STRATEGY_SHARED_OBJECT_REF),
+        clock: tx.object.clock(),
+        yourStableCoin,
+      },
+    );
+
+    return buckCoin;
+  }
+
+  burnAndRedeemYourStableMoveCall(
+    tx: Transaction,
+    yourStableCoin: TransactionObjectInput,
+    redeemedStableCoin: SUPPORTED_REDEMPTION_COIN,
+    recipient: string,
+    redeemedAmount: bigint,
+  ) {
+    const buckCoin = burnAndRedeem(
+      tx,
+      [COIN_TYPE_LIST[redeemedStableCoin], this.factory.$typeArgs[0]],
+      {
+        factory: tx.object(this.factory.id),
         queue: tx.sharedObjectRef(REDEMPTION_QUEUE[redeemedStableCoin]),
         bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
         vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),

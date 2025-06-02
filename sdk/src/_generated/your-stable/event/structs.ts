@@ -1,4 +1,6 @@
+import {String as String1} from "../../_dependencies/source/0x1/ascii/structs";
 import {Option} from "../../_dependencies/source/0x1/option/structs";
+import {String} from "../../_dependencies/source/0x1/string/structs";
 import {TypeName} from "../../_dependencies/source/0x1/type-name/structs";
 import {ID} from "../../_dependencies/source/0x2/object/structs";
 import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructClass, ToField, ToPhantomTypeArgument, ToTypeStr, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, fieldToJSON, phantom} from "../../_framework/reified";
@@ -152,7 +154,7 @@ export class MintYourStable<YourStable extends PhantomTypeArgument> implements S
 
 export function isBurnYourStable(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::event::BurnYourStable` + '<'); }
 
-export interface BurnYourStableFields<YourStable extends PhantomTypeArgument> { factoryId: ToField<ID>; stableCoinType: ToField<TypeName>; yourStableAmount: ToField<"u64">; withdrawalBuck: ToField<"u64">; redeemedBuck: ToField<"u64">; burnedStSbuckAmount: ToField<"u64">; factorySupply: ToField<"u64">; factoryUnderlyingBalance: ToField<"u64">; recipient: ToField<"address"> }
+export interface BurnYourStableFields<YourStable extends PhantomTypeArgument> { factoryId: ToField<ID>; stableCoinType: ToField<TypeName>; yourStableAmount: ToField<"u64">; withdrawalBuck: ToField<"u64">; burnedStSbuckAmount: ToField<"u64">; factorySupply: ToField<"u64">; factoryUnderlyingBalance: ToField<"u64"> }
 
 export type BurnYourStableReified<YourStable extends PhantomTypeArgument> = Reified< BurnYourStable<YourStable>, BurnYourStableFields<YourStable> >;
 
@@ -162,11 +164,11 @@ export class BurnYourStable<YourStable extends PhantomTypeArgument> implements S
 
  readonly $typeName = BurnYourStable.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::event::BurnYourStable<${PhantomToTypeStr<YourStable>}>`; readonly $typeArgs: [PhantomToTypeStr<YourStable>]; readonly $isPhantom = BurnYourStable.$isPhantom;
 
- readonly factoryId: ToField<ID>; readonly stableCoinType: ToField<TypeName>; readonly yourStableAmount: ToField<"u64">; readonly withdrawalBuck: ToField<"u64">; readonly redeemedBuck: ToField<"u64">; readonly burnedStSbuckAmount: ToField<"u64">; readonly factorySupply: ToField<"u64">; readonly factoryUnderlyingBalance: ToField<"u64">; readonly recipient: ToField<"address">
+ readonly factoryId: ToField<ID>; readonly stableCoinType: ToField<TypeName>; readonly yourStableAmount: ToField<"u64">; readonly withdrawalBuck: ToField<"u64">; readonly burnedStSbuckAmount: ToField<"u64">; readonly factorySupply: ToField<"u64">; readonly factoryUnderlyingBalance: ToField<"u64">
 
  private constructor(typeArgs: [PhantomToTypeStr<YourStable>], fields: BurnYourStableFields<YourStable>, ) { this.$fullTypeName = composeSuiType( BurnYourStable.$typeName, ...typeArgs ) as `${typeof PKG_V1}::event::BurnYourStable<${PhantomToTypeStr<YourStable>}>`; this.$typeArgs = typeArgs;
 
- this.factoryId = fields.factoryId;; this.stableCoinType = fields.stableCoinType;; this.yourStableAmount = fields.yourStableAmount;; this.withdrawalBuck = fields.withdrawalBuck;; this.redeemedBuck = fields.redeemedBuck;; this.burnedStSbuckAmount = fields.burnedStSbuckAmount;; this.factorySupply = fields.factorySupply;; this.factoryUnderlyingBalance = fields.factoryUnderlyingBalance;; this.recipient = fields.recipient; }
+ this.factoryId = fields.factoryId;; this.stableCoinType = fields.stableCoinType;; this.yourStableAmount = fields.yourStableAmount;; this.withdrawalBuck = fields.withdrawalBuck;; this.burnedStSbuckAmount = fields.burnedStSbuckAmount;; this.factorySupply = fields.factorySupply;; this.factoryUnderlyingBalance = fields.factoryUnderlyingBalance; }
 
  static reified<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): BurnYourStableReified<ToPhantomTypeArgument<YourStable>> { return { typeName: BurnYourStable.$typeName, fullTypeName: composeSuiType( BurnYourStable.$typeName, ...[extractType(YourStable)] ) as `${typeof PKG_V1}::event::BurnYourStable<${PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>}>`, typeArgs: [ extractType(YourStable) ] as [PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>], isPhantom: BurnYourStable.$isPhantom, reifiedTypeArgs: [YourStable], fromFields: (fields: Record<string, any>) => BurnYourStable.fromFields( YourStable, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => BurnYourStable.fromFieldsWithTypes( YourStable, item, ), fromBcs: (data: Uint8Array) => BurnYourStable.fromBcs( YourStable, data, ), bcs: BurnYourStable.bcs, fromJSONField: (field: any) => BurnYourStable.fromJSONField( YourStable, field, ), fromJSON: (json: Record<string, any>) => BurnYourStable.fromJSON( YourStable, json, ), fromSuiParsedData: (content: SuiParsedData) => BurnYourStable.fromSuiParsedData( YourStable, content, ), fromSuiObjectData: (content: SuiObjectData) => BurnYourStable.fromSuiObjectData( YourStable, content, ), fetch: async (client: SuiClient, id: string) => BurnYourStable.fetch( client, YourStable, id, ), new: ( fields: BurnYourStableFields<ToPhantomTypeArgument<YourStable>>, ) => { return new BurnYourStable( [extractType(YourStable)], fields ) }, kind: "StructClassReified", } }
 
@@ -176,29 +178,29 @@ export class BurnYourStable<YourStable extends PhantomTypeArgument> implements S
 
  static get bcs() { return bcs.struct("BurnYourStable", {
 
- factory_id: ID.bcs, stable_coin_type: TypeName.bcs, your_stable_amount: bcs.u64(), withdrawal_buck: bcs.u64(), redeemed_buck: bcs.u64(), burned_st_sbuck_amount: bcs.u64(), factory_supply: bcs.u64(), factory_underlying_balance: bcs.u64(), recipient: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
+ factory_id: ID.bcs, stable_coin_type: TypeName.bcs, your_stable_amount: bcs.u64(), withdrawal_buck: bcs.u64(), burned_st_sbuck_amount: bcs.u64(), factory_supply: bcs.u64(), factory_underlying_balance: bcs.u64()
 
 }) };
 
- static fromFields<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, fields: Record<string, any> ): BurnYourStable<ToPhantomTypeArgument<YourStable>> { return BurnYourStable.reified( typeArg, ).new( { factoryId: decodeFromFields(ID.reified(), fields.factory_id), stableCoinType: decodeFromFields(TypeName.reified(), fields.stable_coin_type), yourStableAmount: decodeFromFields("u64", fields.your_stable_amount), withdrawalBuck: decodeFromFields("u64", fields.withdrawal_buck), redeemedBuck: decodeFromFields("u64", fields.redeemed_buck), burnedStSbuckAmount: decodeFromFields("u64", fields.burned_st_sbuck_amount), factorySupply: decodeFromFields("u64", fields.factory_supply), factoryUnderlyingBalance: decodeFromFields("u64", fields.factory_underlying_balance), recipient: decodeFromFields("address", fields.recipient) } ) }
+ static fromFields<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, fields: Record<string, any> ): BurnYourStable<ToPhantomTypeArgument<YourStable>> { return BurnYourStable.reified( typeArg, ).new( { factoryId: decodeFromFields(ID.reified(), fields.factory_id), stableCoinType: decodeFromFields(TypeName.reified(), fields.stable_coin_type), yourStableAmount: decodeFromFields("u64", fields.your_stable_amount), withdrawalBuck: decodeFromFields("u64", fields.withdrawal_buck), burnedStSbuckAmount: decodeFromFields("u64", fields.burned_st_sbuck_amount), factorySupply: decodeFromFields("u64", fields.factory_supply), factoryUnderlyingBalance: decodeFromFields("u64", fields.factory_underlying_balance) } ) }
 
  static fromFieldsWithTypes<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, item: FieldsWithTypes ): BurnYourStable<ToPhantomTypeArgument<YourStable>> { if (!isBurnYourStable(item.type)) { throw new Error("not a BurnYourStable type");
 
  } assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
- return BurnYourStable.reified( typeArg, ).new( { factoryId: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory_id), stableCoinType: decodeFromFieldsWithTypes(TypeName.reified(), item.fields.stable_coin_type), yourStableAmount: decodeFromFieldsWithTypes("u64", item.fields.your_stable_amount), withdrawalBuck: decodeFromFieldsWithTypes("u64", item.fields.withdrawal_buck), redeemedBuck: decodeFromFieldsWithTypes("u64", item.fields.redeemed_buck), burnedStSbuckAmount: decodeFromFieldsWithTypes("u64", item.fields.burned_st_sbuck_amount), factorySupply: decodeFromFieldsWithTypes("u64", item.fields.factory_supply), factoryUnderlyingBalance: decodeFromFieldsWithTypes("u64", item.fields.factory_underlying_balance), recipient: decodeFromFieldsWithTypes("address", item.fields.recipient) } ) }
+ return BurnYourStable.reified( typeArg, ).new( { factoryId: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory_id), stableCoinType: decodeFromFieldsWithTypes(TypeName.reified(), item.fields.stable_coin_type), yourStableAmount: decodeFromFieldsWithTypes("u64", item.fields.your_stable_amount), withdrawalBuck: decodeFromFieldsWithTypes("u64", item.fields.withdrawal_buck), burnedStSbuckAmount: decodeFromFieldsWithTypes("u64", item.fields.burned_st_sbuck_amount), factorySupply: decodeFromFieldsWithTypes("u64", item.fields.factory_supply), factoryUnderlyingBalance: decodeFromFieldsWithTypes("u64", item.fields.factory_underlying_balance) } ) }
 
  static fromBcs<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: Uint8Array ): BurnYourStable<ToPhantomTypeArgument<YourStable>> { return BurnYourStable.fromFields( typeArg, BurnYourStable.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- factoryId: this.factoryId,stableCoinType: this.stableCoinType.toJSONField(),yourStableAmount: this.yourStableAmount.toString(),withdrawalBuck: this.withdrawalBuck.toString(),redeemedBuck: this.redeemedBuck.toString(),burnedStSbuckAmount: this.burnedStSbuckAmount.toString(),factorySupply: this.factorySupply.toString(),factoryUnderlyingBalance: this.factoryUnderlyingBalance.toString(),recipient: this.recipient,
+ factoryId: this.factoryId,stableCoinType: this.stableCoinType.toJSONField(),yourStableAmount: this.yourStableAmount.toString(),withdrawalBuck: this.withdrawalBuck.toString(),burnedStSbuckAmount: this.burnedStSbuckAmount.toString(),factorySupply: this.factorySupply.toString(),factoryUnderlyingBalance: this.factoryUnderlyingBalance.toString(),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, field: any ): BurnYourStable<ToPhantomTypeArgument<YourStable>> { return BurnYourStable.reified( typeArg, ).new( { factoryId: decodeFromJSONField(ID.reified(), field.factoryId), stableCoinType: decodeFromJSONField(TypeName.reified(), field.stableCoinType), yourStableAmount: decodeFromJSONField("u64", field.yourStableAmount), withdrawalBuck: decodeFromJSONField("u64", field.withdrawalBuck), redeemedBuck: decodeFromJSONField("u64", field.redeemedBuck), burnedStSbuckAmount: decodeFromJSONField("u64", field.burnedStSbuckAmount), factorySupply: decodeFromJSONField("u64", field.factorySupply), factoryUnderlyingBalance: decodeFromJSONField("u64", field.factoryUnderlyingBalance), recipient: decodeFromJSONField("address", field.recipient) } ) }
+ static fromJSONField<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, field: any ): BurnYourStable<ToPhantomTypeArgument<YourStable>> { return BurnYourStable.reified( typeArg, ).new( { factoryId: decodeFromJSONField(ID.reified(), field.factoryId), stableCoinType: decodeFromJSONField(TypeName.reified(), field.stableCoinType), yourStableAmount: decodeFromJSONField("u64", field.yourStableAmount), withdrawalBuck: decodeFromJSONField("u64", field.withdrawalBuck), burnedStSbuckAmount: decodeFromJSONField("u64", field.burnedStSbuckAmount), factorySupply: decodeFromJSONField("u64", field.factorySupply), factoryUnderlyingBalance: decodeFromJSONField("u64", field.factoryUnderlyingBalance) } ) }
 
  static fromJSON<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, json: Record<string, any> ): BurnYourStable<ToPhantomTypeArgument<YourStable>> { if (json.$typeName !== BurnYourStable.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(BurnYourStable.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
 
@@ -285,6 +287,216 @@ export class ClaimReward<YourStable extends PhantomTypeArgument> implements Stru
  static async fetch<YourStable extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: YourStable, id: string ): Promise<ClaimReward<ToPhantomTypeArgument<YourStable>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching ClaimReward object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isClaimReward(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a ClaimReward object`); }
 
  return ClaimReward.fromSuiObjectData( typeArg, res.data ); }
+
+ }
+
+/* ============================== SetBasicLimit =============================== */
+
+export function isSetBasicLimit(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::event::SetBasicLimit` + '<'); }
+
+export interface SetBasicLimitFields<YourStable extends PhantomTypeArgument> { factory: ToField<ID>; limit: ToField<"u64"> }
+
+export type SetBasicLimitReified<YourStable extends PhantomTypeArgument> = Reified< SetBasicLimit<YourStable>, SetBasicLimitFields<YourStable> >;
+
+export class SetBasicLimit<YourStable extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::event::SetBasicLimit`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+
+ readonly $typeName = SetBasicLimit.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::event::SetBasicLimit<${PhantomToTypeStr<YourStable>}>`; readonly $typeArgs: [PhantomToTypeStr<YourStable>]; readonly $isPhantom = SetBasicLimit.$isPhantom;
+
+ readonly factory: ToField<ID>; readonly limit: ToField<"u64">
+
+ private constructor(typeArgs: [PhantomToTypeStr<YourStable>], fields: SetBasicLimitFields<YourStable>, ) { this.$fullTypeName = composeSuiType( SetBasicLimit.$typeName, ...typeArgs ) as `${typeof PKG_V1}::event::SetBasicLimit<${PhantomToTypeStr<YourStable>}>`; this.$typeArgs = typeArgs;
+
+ this.factory = fields.factory;; this.limit = fields.limit; }
+
+ static reified<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): SetBasicLimitReified<ToPhantomTypeArgument<YourStable>> { return { typeName: SetBasicLimit.$typeName, fullTypeName: composeSuiType( SetBasicLimit.$typeName, ...[extractType(YourStable)] ) as `${typeof PKG_V1}::event::SetBasicLimit<${PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>}>`, typeArgs: [ extractType(YourStable) ] as [PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>], isPhantom: SetBasicLimit.$isPhantom, reifiedTypeArgs: [YourStable], fromFields: (fields: Record<string, any>) => SetBasicLimit.fromFields( YourStable, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SetBasicLimit.fromFieldsWithTypes( YourStable, item, ), fromBcs: (data: Uint8Array) => SetBasicLimit.fromBcs( YourStable, data, ), bcs: SetBasicLimit.bcs, fromJSONField: (field: any) => SetBasicLimit.fromJSONField( YourStable, field, ), fromJSON: (json: Record<string, any>) => SetBasicLimit.fromJSON( YourStable, json, ), fromSuiParsedData: (content: SuiParsedData) => SetBasicLimit.fromSuiParsedData( YourStable, content, ), fromSuiObjectData: (content: SuiObjectData) => SetBasicLimit.fromSuiObjectData( YourStable, content, ), fetch: async (client: SuiClient, id: string) => SetBasicLimit.fetch( client, YourStable, id, ), new: ( fields: SetBasicLimitFields<ToPhantomTypeArgument<YourStable>>, ) => { return new SetBasicLimit( [extractType(YourStable)], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return SetBasicLimit.reified }
+
+ static phantom<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): PhantomReified<ToTypeStr<SetBasicLimit<ToPhantomTypeArgument<YourStable>>>> { return phantom(SetBasicLimit.reified( YourStable )); } static get p() { return SetBasicLimit.phantom }
+
+ static get bcs() { return bcs.struct("SetBasicLimit", {
+
+ factory: ID.bcs, limit: bcs.u64()
+
+}) };
+
+ static fromFields<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, fields: Record<string, any> ): SetBasicLimit<ToPhantomTypeArgument<YourStable>> { return SetBasicLimit.reified( typeArg, ).new( { factory: decodeFromFields(ID.reified(), fields.factory), limit: decodeFromFields("u64", fields.limit) } ) }
+
+ static fromFieldsWithTypes<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, item: FieldsWithTypes ): SetBasicLimit<ToPhantomTypeArgument<YourStable>> { if (!isSetBasicLimit(item.type)) { throw new Error("not a SetBasicLimit type");
+
+ } assertFieldsWithTypesArgsMatch(item, [typeArg]);
+
+ return SetBasicLimit.reified( typeArg, ).new( { factory: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory), limit: decodeFromFieldsWithTypes("u64", item.fields.limit) } ) }
+
+ static fromBcs<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: Uint8Array ): SetBasicLimit<ToPhantomTypeArgument<YourStable>> { return SetBasicLimit.fromFields( typeArg, SetBasicLimit.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ factory: this.factory,limit: this.limit.toString(),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, field: any ): SetBasicLimit<ToPhantomTypeArgument<YourStable>> { return SetBasicLimit.reified( typeArg, ).new( { factory: decodeFromJSONField(ID.reified(), field.factory), limit: decodeFromJSONField("u64", field.limit) } ) }
+
+ static fromJSON<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, json: Record<string, any> ): SetBasicLimit<ToPhantomTypeArgument<YourStable>> { if (json.$typeName !== SetBasicLimit.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(SetBasicLimit.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
+
+ return SetBasicLimit.fromJSONField( typeArg, json, ) }
+
+ static fromSuiParsedData<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, content: SuiParsedData ): SetBasicLimit<ToPhantomTypeArgument<YourStable>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isSetBasicLimit(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a SetBasicLimit object`); } return SetBasicLimit.fromFieldsWithTypes( typeArg, content ); }
+
+ static fromSuiObjectData<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: SuiObjectData ): SetBasicLimit<ToPhantomTypeArgument<YourStable>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isSetBasicLimit(data.bcs.type)) { throw new Error(`object at is not a SetBasicLimit object`); }
+
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
+
+ return SetBasicLimit.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return SetBasicLimit.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch<YourStable extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: YourStable, id: string ): Promise<SetBasicLimit<ToPhantomTypeArgument<YourStable>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching SetBasicLimit object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isSetBasicLimit(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a SetBasicLimit object`); }
+
+ return SetBasicLimit.fromSuiObjectData( typeArg, res.data ); }
+
+ }
+
+/* ============================== SetExtensionLimit =============================== */
+
+export function isSetExtensionLimit(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::event::SetExtensionLimit` + '<'); }
+
+export interface SetExtensionLimitFields<YourStable extends PhantomTypeArgument> { factory: ToField<ID>; extension: ToField<TypeName>; limit: ToField<"u64"> }
+
+export type SetExtensionLimitReified<YourStable extends PhantomTypeArgument> = Reified< SetExtensionLimit<YourStable>, SetExtensionLimitFields<YourStable> >;
+
+export class SetExtensionLimit<YourStable extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::event::SetExtensionLimit`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+
+ readonly $typeName = SetExtensionLimit.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::event::SetExtensionLimit<${PhantomToTypeStr<YourStable>}>`; readonly $typeArgs: [PhantomToTypeStr<YourStable>]; readonly $isPhantom = SetExtensionLimit.$isPhantom;
+
+ readonly factory: ToField<ID>; readonly extension: ToField<TypeName>; readonly limit: ToField<"u64">
+
+ private constructor(typeArgs: [PhantomToTypeStr<YourStable>], fields: SetExtensionLimitFields<YourStable>, ) { this.$fullTypeName = composeSuiType( SetExtensionLimit.$typeName, ...typeArgs ) as `${typeof PKG_V1}::event::SetExtensionLimit<${PhantomToTypeStr<YourStable>}>`; this.$typeArgs = typeArgs;
+
+ this.factory = fields.factory;; this.extension = fields.extension;; this.limit = fields.limit; }
+
+ static reified<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): SetExtensionLimitReified<ToPhantomTypeArgument<YourStable>> { return { typeName: SetExtensionLimit.$typeName, fullTypeName: composeSuiType( SetExtensionLimit.$typeName, ...[extractType(YourStable)] ) as `${typeof PKG_V1}::event::SetExtensionLimit<${PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>}>`, typeArgs: [ extractType(YourStable) ] as [PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>], isPhantom: SetExtensionLimit.$isPhantom, reifiedTypeArgs: [YourStable], fromFields: (fields: Record<string, any>) => SetExtensionLimit.fromFields( YourStable, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => SetExtensionLimit.fromFieldsWithTypes( YourStable, item, ), fromBcs: (data: Uint8Array) => SetExtensionLimit.fromBcs( YourStable, data, ), bcs: SetExtensionLimit.bcs, fromJSONField: (field: any) => SetExtensionLimit.fromJSONField( YourStable, field, ), fromJSON: (json: Record<string, any>) => SetExtensionLimit.fromJSON( YourStable, json, ), fromSuiParsedData: (content: SuiParsedData) => SetExtensionLimit.fromSuiParsedData( YourStable, content, ), fromSuiObjectData: (content: SuiObjectData) => SetExtensionLimit.fromSuiObjectData( YourStable, content, ), fetch: async (client: SuiClient, id: string) => SetExtensionLimit.fetch( client, YourStable, id, ), new: ( fields: SetExtensionLimitFields<ToPhantomTypeArgument<YourStable>>, ) => { return new SetExtensionLimit( [extractType(YourStable)], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return SetExtensionLimit.reified }
+
+ static phantom<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): PhantomReified<ToTypeStr<SetExtensionLimit<ToPhantomTypeArgument<YourStable>>>> { return phantom(SetExtensionLimit.reified( YourStable )); } static get p() { return SetExtensionLimit.phantom }
+
+ static get bcs() { return bcs.struct("SetExtensionLimit", {
+
+ factory: ID.bcs, extension: TypeName.bcs, limit: bcs.u64()
+
+}) };
+
+ static fromFields<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, fields: Record<string, any> ): SetExtensionLimit<ToPhantomTypeArgument<YourStable>> { return SetExtensionLimit.reified( typeArg, ).new( { factory: decodeFromFields(ID.reified(), fields.factory), extension: decodeFromFields(TypeName.reified(), fields.extension), limit: decodeFromFields("u64", fields.limit) } ) }
+
+ static fromFieldsWithTypes<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, item: FieldsWithTypes ): SetExtensionLimit<ToPhantomTypeArgument<YourStable>> { if (!isSetExtensionLimit(item.type)) { throw new Error("not a SetExtensionLimit type");
+
+ } assertFieldsWithTypesArgsMatch(item, [typeArg]);
+
+ return SetExtensionLimit.reified( typeArg, ).new( { factory: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory), extension: decodeFromFieldsWithTypes(TypeName.reified(), item.fields.extension), limit: decodeFromFieldsWithTypes("u64", item.fields.limit) } ) }
+
+ static fromBcs<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: Uint8Array ): SetExtensionLimit<ToPhantomTypeArgument<YourStable>> { return SetExtensionLimit.fromFields( typeArg, SetExtensionLimit.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ factory: this.factory,extension: this.extension.toJSONField(),limit: this.limit.toString(),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, field: any ): SetExtensionLimit<ToPhantomTypeArgument<YourStable>> { return SetExtensionLimit.reified( typeArg, ).new( { factory: decodeFromJSONField(ID.reified(), field.factory), extension: decodeFromJSONField(TypeName.reified(), field.extension), limit: decodeFromJSONField("u64", field.limit) } ) }
+
+ static fromJSON<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, json: Record<string, any> ): SetExtensionLimit<ToPhantomTypeArgument<YourStable>> { if (json.$typeName !== SetExtensionLimit.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(SetExtensionLimit.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
+
+ return SetExtensionLimit.fromJSONField( typeArg, json, ) }
+
+ static fromSuiParsedData<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, content: SuiParsedData ): SetExtensionLimit<ToPhantomTypeArgument<YourStable>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isSetExtensionLimit(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a SetExtensionLimit object`); } return SetExtensionLimit.fromFieldsWithTypes( typeArg, content ); }
+
+ static fromSuiObjectData<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: SuiObjectData ): SetExtensionLimit<ToPhantomTypeArgument<YourStable>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isSetExtensionLimit(data.bcs.type)) { throw new Error(`object at is not a SetExtensionLimit object`); }
+
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
+
+ return SetExtensionLimit.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return SetExtensionLimit.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch<YourStable extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: YourStable, id: string ): Promise<SetExtensionLimit<ToPhantomTypeArgument<YourStable>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching SetExtensionLimit object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isSetExtensionLimit(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a SetExtensionLimit object`); }
+
+ return SetExtensionLimit.fromSuiObjectData( typeArg, res.data ); }
+
+ }
+
+/* ============================== UpdateMetadata =============================== */
+
+export function isUpdateMetadata(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::event::UpdateMetadata` + '<'); }
+
+export interface UpdateMetadataFields<YourStable extends PhantomTypeArgument> { factory: ToField<ID>; metadata: ToField<ID>; name: ToField<Option<String>>; symbol: ToField<Option<String1>>; description: ToField<Option<String>>; iconUrl: ToField<Option<String1>> }
+
+export type UpdateMetadataReified<YourStable extends PhantomTypeArgument> = Reified< UpdateMetadata<YourStable>, UpdateMetadataFields<YourStable> >;
+
+export class UpdateMetadata<YourStable extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::event::UpdateMetadata`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+
+ readonly $typeName = UpdateMetadata.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::event::UpdateMetadata<${PhantomToTypeStr<YourStable>}>`; readonly $typeArgs: [PhantomToTypeStr<YourStable>]; readonly $isPhantom = UpdateMetadata.$isPhantom;
+
+ readonly factory: ToField<ID>; readonly metadata: ToField<ID>; readonly name: ToField<Option<String>>; readonly symbol: ToField<Option<String1>>; readonly description: ToField<Option<String>>; readonly iconUrl: ToField<Option<String1>>
+
+ private constructor(typeArgs: [PhantomToTypeStr<YourStable>], fields: UpdateMetadataFields<YourStable>, ) { this.$fullTypeName = composeSuiType( UpdateMetadata.$typeName, ...typeArgs ) as `${typeof PKG_V1}::event::UpdateMetadata<${PhantomToTypeStr<YourStable>}>`; this.$typeArgs = typeArgs;
+
+ this.factory = fields.factory;; this.metadata = fields.metadata;; this.name = fields.name;; this.symbol = fields.symbol;; this.description = fields.description;; this.iconUrl = fields.iconUrl; }
+
+ static reified<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): UpdateMetadataReified<ToPhantomTypeArgument<YourStable>> { return { typeName: UpdateMetadata.$typeName, fullTypeName: composeSuiType( UpdateMetadata.$typeName, ...[extractType(YourStable)] ) as `${typeof PKG_V1}::event::UpdateMetadata<${PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>}>`, typeArgs: [ extractType(YourStable) ] as [PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>], isPhantom: UpdateMetadata.$isPhantom, reifiedTypeArgs: [YourStable], fromFields: (fields: Record<string, any>) => UpdateMetadata.fromFields( YourStable, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => UpdateMetadata.fromFieldsWithTypes( YourStable, item, ), fromBcs: (data: Uint8Array) => UpdateMetadata.fromBcs( YourStable, data, ), bcs: UpdateMetadata.bcs, fromJSONField: (field: any) => UpdateMetadata.fromJSONField( YourStable, field, ), fromJSON: (json: Record<string, any>) => UpdateMetadata.fromJSON( YourStable, json, ), fromSuiParsedData: (content: SuiParsedData) => UpdateMetadata.fromSuiParsedData( YourStable, content, ), fromSuiObjectData: (content: SuiObjectData) => UpdateMetadata.fromSuiObjectData( YourStable, content, ), fetch: async (client: SuiClient, id: string) => UpdateMetadata.fetch( client, YourStable, id, ), new: ( fields: UpdateMetadataFields<ToPhantomTypeArgument<YourStable>>, ) => { return new UpdateMetadata( [extractType(YourStable)], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return UpdateMetadata.reified }
+
+ static phantom<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): PhantomReified<ToTypeStr<UpdateMetadata<ToPhantomTypeArgument<YourStable>>>> { return phantom(UpdateMetadata.reified( YourStable )); } static get p() { return UpdateMetadata.phantom }
+
+ static get bcs() { return bcs.struct("UpdateMetadata", {
+
+ factory: ID.bcs, metadata: ID.bcs, name: Option.bcs(String.bcs), symbol: Option.bcs(String1.bcs), description: Option.bcs(String.bcs), icon_url: Option.bcs(String1.bcs)
+
+}) };
+
+ static fromFields<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, fields: Record<string, any> ): UpdateMetadata<ToPhantomTypeArgument<YourStable>> { return UpdateMetadata.reified( typeArg, ).new( { factory: decodeFromFields(ID.reified(), fields.factory), metadata: decodeFromFields(ID.reified(), fields.metadata), name: decodeFromFields(Option.reified(String.reified()), fields.name), symbol: decodeFromFields(Option.reified(String1.reified()), fields.symbol), description: decodeFromFields(Option.reified(String.reified()), fields.description), iconUrl: decodeFromFields(Option.reified(String1.reified()), fields.icon_url) } ) }
+
+ static fromFieldsWithTypes<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, item: FieldsWithTypes ): UpdateMetadata<ToPhantomTypeArgument<YourStable>> { if (!isUpdateMetadata(item.type)) { throw new Error("not a UpdateMetadata type");
+
+ } assertFieldsWithTypesArgsMatch(item, [typeArg]);
+
+ return UpdateMetadata.reified( typeArg, ).new( { factory: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory), metadata: decodeFromFieldsWithTypes(ID.reified(), item.fields.metadata), name: decodeFromFieldsWithTypes(Option.reified(String.reified()), item.fields.name), symbol: decodeFromFieldsWithTypes(Option.reified(String1.reified()), item.fields.symbol), description: decodeFromFieldsWithTypes(Option.reified(String.reified()), item.fields.description), iconUrl: decodeFromFieldsWithTypes(Option.reified(String1.reified()), item.fields.icon_url) } ) }
+
+ static fromBcs<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: Uint8Array ): UpdateMetadata<ToPhantomTypeArgument<YourStable>> { return UpdateMetadata.fromFields( typeArg, UpdateMetadata.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ factory: this.factory,metadata: this.metadata,name: fieldToJSON<Option<String>>(`${Option.$typeName}<${String.$typeName}>`, this.name),symbol: fieldToJSON<Option<String1>>(`${Option.$typeName}<${String1.$typeName}>`, this.symbol),description: fieldToJSON<Option<String>>(`${Option.$typeName}<${String.$typeName}>`, this.description),iconUrl: fieldToJSON<Option<String1>>(`${Option.$typeName}<${String1.$typeName}>`, this.iconUrl),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, field: any ): UpdateMetadata<ToPhantomTypeArgument<YourStable>> { return UpdateMetadata.reified( typeArg, ).new( { factory: decodeFromJSONField(ID.reified(), field.factory), metadata: decodeFromJSONField(ID.reified(), field.metadata), name: decodeFromJSONField(Option.reified(String.reified()), field.name), symbol: decodeFromJSONField(Option.reified(String1.reified()), field.symbol), description: decodeFromJSONField(Option.reified(String.reified()), field.description), iconUrl: decodeFromJSONField(Option.reified(String1.reified()), field.iconUrl) } ) }
+
+ static fromJSON<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, json: Record<string, any> ): UpdateMetadata<ToPhantomTypeArgument<YourStable>> { if (json.$typeName !== UpdateMetadata.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(UpdateMetadata.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
+
+ return UpdateMetadata.fromJSONField( typeArg, json, ) }
+
+ static fromSuiParsedData<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, content: SuiParsedData ): UpdateMetadata<ToPhantomTypeArgument<YourStable>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isUpdateMetadata(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a UpdateMetadata object`); } return UpdateMetadata.fromFieldsWithTypes( typeArg, content ); }
+
+ static fromSuiObjectData<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: SuiObjectData ): UpdateMetadata<ToPhantomTypeArgument<YourStable>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isUpdateMetadata(data.bcs.type)) { throw new Error(`object at is not a UpdateMetadata object`); }
+
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
+
+ return UpdateMetadata.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return UpdateMetadata.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch<YourStable extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: YourStable, id: string ): Promise<UpdateMetadata<ToPhantomTypeArgument<YourStable>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching UpdateMetadata object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isUpdateMetadata(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a UpdateMetadata object`); }
+
+ return UpdateMetadata.fromSuiObjectData( typeArg, res.data ); }
 
  }
 

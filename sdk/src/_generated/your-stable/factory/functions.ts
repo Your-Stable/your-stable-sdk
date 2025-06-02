@@ -15,9 +15,13 @@ export interface MintArgs { factory: TransactionObjectInput; vault: TransactionO
 
 export function mint( tx: Transaction, typeArgs: [string, string], args: MintArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::factory::mint`, typeArguments: typeArgs, arguments: [ obj(tx, args.factory), obj(tx, args.vault), obj(tx, args.bucketProtocol), obj(tx, args.clock), obj(tx, args.stableCoin) ], }) }
 
-export interface BurnArgs { factory: TransactionObjectInput; queue: TransactionObjectInput; bucketProtocol: TransactionObjectInput; vault: TransactionObjectInput; flask: TransactionObjectInput; fountain: TransactionObjectInput; strategy: TransactionObjectInput; clock: TransactionObjectInput; yourStableCoin: TransactionObjectInput; redeemedAmount: bigint | TransactionArgument; recipient: string | TransactionArgument }
+export interface BurnArgs { factory: TransactionObjectInput; bucketProtocol: TransactionObjectInput; vault: TransactionObjectInput; flask: TransactionObjectInput; fountain: TransactionObjectInput; strategy: TransactionObjectInput; clock: TransactionObjectInput; yourStableCoin: TransactionObjectInput }
 
-export function burn( tx: Transaction, typeArgs: [string, string], args: BurnArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::factory::burn`, typeArguments: typeArgs, arguments: [ obj(tx, args.factory), obj(tx, args.queue), obj(tx, args.bucketProtocol), obj(tx, args.vault), obj(tx, args.flask), obj(tx, args.fountain), obj(tx, args.strategy), obj(tx, args.clock), obj(tx, args.yourStableCoin), pure(tx, args.redeemedAmount, `u64`), pure(tx, args.recipient, `address`) ], }) }
+export function burn( tx: Transaction, typeArgs: [string, string], args: BurnArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::factory::burn`, typeArguments: typeArgs, arguments: [ obj(tx, args.factory), obj(tx, args.bucketProtocol), obj(tx, args.vault), obj(tx, args.flask), obj(tx, args.fountain), obj(tx, args.strategy), obj(tx, args.clock), obj(tx, args.yourStableCoin) ], }) }
+
+export interface BurnAndRedeemArgs { factory: TransactionObjectInput; queue: TransactionObjectInput; bucketProtocol: TransactionObjectInput; vault: TransactionObjectInput; flask: TransactionObjectInput; fountain: TransactionObjectInput; strategy: TransactionObjectInput; clock: TransactionObjectInput; yourStableCoin: TransactionObjectInput; redeemedAmount: bigint | TransactionArgument; recipient: string | TransactionArgument }
+
+export function burnAndRedeem( tx: Transaction, typeArgs: [string, string], args: BurnAndRedeemArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::factory::burn_and_redeem`, typeArguments: typeArgs, arguments: [ obj(tx, args.factory), obj(tx, args.queue), obj(tx, args.bucketProtocol), obj(tx, args.vault), obj(tx, args.flask), obj(tx, args.fountain), obj(tx, args.strategy), obj(tx, args.clock), obj(tx, args.yourStableCoin), pure(tx, args.redeemedAmount, `u64`), pure(tx, args.recipient, `address`) ], }) }
 
 export interface SetBasicLimitArgs { cap: TransactionObjectInput; factory: TransactionObjectInput; limit: bigint | TransactionArgument }
 

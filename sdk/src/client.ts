@@ -261,9 +261,9 @@ export class YourStableClient {
   }
 
   // --> admin
-  claimRewardMoveCall(tx: Transaction, factoryCap: string) {
+  claimRewardMoveCall(tx: Transaction) {
     const stSbuckCoin = claimReward(tx, this.factory.$typeArgs[0], {
-      cap: tx.object(factoryCap),
+      cap: tx.object(this.factoryCap),
       factory: tx.object(this.factory.id),
       vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
       clock: tx.object.clock(),
@@ -274,7 +274,6 @@ export class YourStableClient {
 
   updateMetadataMoveCall(
     tx: Transaction,
-    factoryCap: string,
     metadataObjectId: string,
     input?: {
       name?: string;
@@ -284,7 +283,7 @@ export class YourStableClient {
     },
   ) {
     updateMetadata(tx, this.factory.$typeArgs[0], {
-      cap: tx.object(factoryCap),
+      cap: tx.object(this.factoryCap),
       factory: tx.object(this.factory.id),
       metadata: tx.object(metadataObjectId),
       name: tx.pure.option("string", input?.name || null),
@@ -294,9 +293,9 @@ export class YourStableClient {
     });
   }
 
-  setBasicLimitMoveCall(tx: Transaction, factoryCap: string, limit: bigint) {
+  setBasicLimitMoveCall(tx: Transaction, limit: bigint) {
     setBasicLimit(tx, this.factory.$typeArgs[0], {
-      cap: tx.object(factoryCap),
+      cap: tx.object(this.factoryCap),
       factory: tx.object(this.factory.id),
       limit: tx.pure.u64(limit),
     });
@@ -305,11 +304,10 @@ export class YourStableClient {
   setExtensionLimitMoveCall(
     tx: Transaction,
     witnessType: string,
-    factoryCap: string,
     limit: bigint,
   ) {
     setExtensionLimit(tx, [this.factory.$typeArgs[0], witnessType], {
-      cap: tx.object(factoryCap),
+      cap: tx.object(this.factoryCap),
       factory: tx.object(this.factory.id),
       limit: tx.pure.u64(limit),
     });

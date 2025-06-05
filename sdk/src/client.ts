@@ -1,5 +1,5 @@
 import { type SuiClient } from "@mysten/sui/client";
-import { Factory } from "./_generated/your-stable/factory/structs";
+import { Factory, YourStableFactory } from "./_generated/your-stable/factory/structs";
 import { phantom } from "./_generated/_framework/reified";
 import {
   BUCKET_PROTOCOL_SHARED_OBJECT_REF,
@@ -35,7 +35,7 @@ import {
 } from "@mysten/sui/transactions";
 import { devInspectTransaction } from "./utils/transaction";
 import { bcs } from "@mysten/sui/bcs";
-import { create } from "./_generated/your-stable/redemption-queue/functions";
+import { batchRedeem, create } from "./_generated/your-stable/redemption-queue/functions";
 import { normalizeStructTag } from "@mysten/sui/utils";
 
 export class YourStableClient {
@@ -281,6 +281,25 @@ export class YourStableClient {
     );
 
     return buckCoin;
+  }
+
+  batchRedeem(
+    tx: Transaction,
+    redeemedStableCoin: SUPPORTED_REDEMPTION_COIN,
+    batchStart: null | bigint,
+    batchSize: bigint
+  ) {
+    batchRedeem(
+      tx,
+      [COIN_TYPE_LIST[redeemedStableCoin], YourStableFactory.$typeName],
+      {
+        queue: tx.sharedObjectRef(REDEMPTION_QUEUE[redeemedStableCoin]),
+        bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
+        clock: tx.object.clock(),
+        batchStart: tx.pure.option('u64', batchStart),
+        batchSize: tx.pure.u64(batchSize)
+      },
+    );
   }
 
   // --> admin

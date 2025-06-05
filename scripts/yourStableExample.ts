@@ -144,8 +144,55 @@ export async function burnYourStable() {
     BigInt(burnedAmount),
   );
   // stableCoin Amount to redeem
-  const redeemedAmount = BigInt(burnedAmount);
-  const buckCoin = factory.burnYourStableMoveCall(
+  const buckCoin = factory.burnYourStableMoveCall(tx, yourStableCoin, "USDC");
+
+  tx.transferObjects([buckCoin], signer.toSuiAddress());
+
+  const dryRunResponse = await dryRun(suiClient, tx, signer.toSuiAddress());
+  logger.info({ dryRunResponse });
+
+  if (dryRunResponse.dryrunRes.effects.status.status === "success") {
+    //execute transaction if it's proper
+    const response = await suiClient.signAndExecuteTransaction({
+      transaction: tx,
+      signer,
+    });
+
+    logger.info({ response });
+  } else {
+    logger.error(dryRunResponse.dryrunRes.effects.status.error);
+  }
+}
+
+export async function burnAndRedeemYourStable(
+  burnedAmount: bigint,
+  redeemedAmount: bigint,
+) {
+  const signer = loadSigner();
+
+  const yourStableCoinType =
+    "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
+
+  // create Factory instance
+  const factory = await YourStableClient.initialize(
+    suiClient,
+    yourStableCoinType,
+  );
+
+  logger.info("Interacting with Factory:");
+  logger.info({ factory });
+
+  const tx = new Transaction();
+  // example: 0.01 yourStableCoin
+  const yourStableCoin = await getInputCoins(
+    tx,
+    suiClient,
+    signer.toSuiAddress(),
+    yourStableCoinType,
+    burnedAmount,
+  );
+  // stableCoin Amount to redeem
+  const buckCoin = factory.burnAndRedeemYourStableMoveCall(
     tx,
     yourStableCoin,
     "USDC",
@@ -275,4 +322,4 @@ async function getYourStableFactory() {
   });
 }
 
-setBaseLimit().catch(console.error);
+claimReward().catch(console.error);

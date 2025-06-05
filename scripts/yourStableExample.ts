@@ -248,6 +248,35 @@ export async function claimReward() {
   }
 }
 
+export async function batchRedeem() {
+  const signer = loadSigner();
+
+  const yourStableCoinType =
+    "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
+
+  const factory = await YourStableClient.initialize(
+    suiClient,
+    yourStableCoinType,
+  );
+
+  const tx = new Transaction();
+  factory.batchRedeem(tx, 'USDC', null, BigInt(100))
+
+  const dryRunResponse = await dryRun(suiClient, tx, signer.toSuiAddress());
+
+  if (dryRunResponse.dryrunRes.effects.status.status === "success") {
+    //execute transaction if it's proper
+    const response = await suiClient.signAndExecuteTransaction({
+      transaction: tx,
+      signer,
+    });
+
+    logger.info({ response });
+  } else {
+    logger.error(dryRunResponse.dryrunRes.effects.status.error);
+  }
+}
+
 export async function setBaseLimit() {
   const signer = loadSigner();
 
@@ -322,4 +351,4 @@ async function getYourStableFactory() {
   });
 }
 
-claimReward().catch(console.error);
+batchRedeem().catch(console.error);

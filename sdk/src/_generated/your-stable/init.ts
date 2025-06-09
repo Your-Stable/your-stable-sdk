@@ -1,4 +1,5 @@
 import * as capKey from "./cap-key/structs";
+import * as config from "./config/structs";
 import * as event from "./event/structs";
 import * as factory from "./factory/structs";
 import * as limitedSupply from "./limited-supply/structs";
@@ -7,9 +8,12 @@ import * as registry from "./registry/structs";
 import {StructClassLoader} from "../_framework/loader";
 
 export function registerClasses(loader: StructClassLoader) { loader.register(capKey.CapKey);
+loader.register(config.Config);
 loader.register(event.NewFactory);
 loader.register(event.MintYourStable);
 loader.register(event.BurnYourStable);
+loader.register(event.MintYourStableWithExtension);
+loader.register(event.BurnYourStableWithExtension);
 loader.register(event.ClaimReward);
 loader.register(event.SetBasicLimit);
 loader.register(event.SetExtensionLimit);

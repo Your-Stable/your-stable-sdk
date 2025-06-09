@@ -220,6 +220,146 @@ export class BurnYourStable<YourStable extends PhantomTypeArgument> implements S
 
  }
 
+/* ============================== MintYourStableWithExtension =============================== */
+
+export function isMintYourStableWithExtension(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::event::MintYourStableWithExtension` + '<'); }
+
+export interface MintYourStableWithExtensionFields<YourStable extends PhantomTypeArgument> { factoryId: ToField<ID>; extensionType: ToField<TypeName>; yourStableAmount: ToField<"u64">; extensionSupply: ToField<"u64"> }
+
+export type MintYourStableWithExtensionReified<YourStable extends PhantomTypeArgument> = Reified< MintYourStableWithExtension<YourStable>, MintYourStableWithExtensionFields<YourStable> >;
+
+export class MintYourStableWithExtension<YourStable extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::event::MintYourStableWithExtension`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+
+ readonly $typeName = MintYourStableWithExtension.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::event::MintYourStableWithExtension<${PhantomToTypeStr<YourStable>}>`; readonly $typeArgs: [PhantomToTypeStr<YourStable>]; readonly $isPhantom = MintYourStableWithExtension.$isPhantom;
+
+ readonly factoryId: ToField<ID>; readonly extensionType: ToField<TypeName>; readonly yourStableAmount: ToField<"u64">; readonly extensionSupply: ToField<"u64">
+
+ private constructor(typeArgs: [PhantomToTypeStr<YourStable>], fields: MintYourStableWithExtensionFields<YourStable>, ) { this.$fullTypeName = composeSuiType( MintYourStableWithExtension.$typeName, ...typeArgs ) as `${typeof PKG_V1}::event::MintYourStableWithExtension<${PhantomToTypeStr<YourStable>}>`; this.$typeArgs = typeArgs;
+
+ this.factoryId = fields.factoryId;; this.extensionType = fields.extensionType;; this.yourStableAmount = fields.yourStableAmount;; this.extensionSupply = fields.extensionSupply; }
+
+ static reified<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): MintYourStableWithExtensionReified<ToPhantomTypeArgument<YourStable>> { return { typeName: MintYourStableWithExtension.$typeName, fullTypeName: composeSuiType( MintYourStableWithExtension.$typeName, ...[extractType(YourStable)] ) as `${typeof PKG_V1}::event::MintYourStableWithExtension<${PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>}>`, typeArgs: [ extractType(YourStable) ] as [PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>], isPhantom: MintYourStableWithExtension.$isPhantom, reifiedTypeArgs: [YourStable], fromFields: (fields: Record<string, any>) => MintYourStableWithExtension.fromFields( YourStable, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => MintYourStableWithExtension.fromFieldsWithTypes( YourStable, item, ), fromBcs: (data: Uint8Array) => MintYourStableWithExtension.fromBcs( YourStable, data, ), bcs: MintYourStableWithExtension.bcs, fromJSONField: (field: any) => MintYourStableWithExtension.fromJSONField( YourStable, field, ), fromJSON: (json: Record<string, any>) => MintYourStableWithExtension.fromJSON( YourStable, json, ), fromSuiParsedData: (content: SuiParsedData) => MintYourStableWithExtension.fromSuiParsedData( YourStable, content, ), fromSuiObjectData: (content: SuiObjectData) => MintYourStableWithExtension.fromSuiObjectData( YourStable, content, ), fetch: async (client: SuiClient, id: string) => MintYourStableWithExtension.fetch( client, YourStable, id, ), new: ( fields: MintYourStableWithExtensionFields<ToPhantomTypeArgument<YourStable>>, ) => { return new MintYourStableWithExtension( [extractType(YourStable)], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return MintYourStableWithExtension.reified }
+
+ static phantom<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): PhantomReified<ToTypeStr<MintYourStableWithExtension<ToPhantomTypeArgument<YourStable>>>> { return phantom(MintYourStableWithExtension.reified( YourStable )); } static get p() { return MintYourStableWithExtension.phantom }
+
+ static get bcs() { return bcs.struct("MintYourStableWithExtension", {
+
+ factory_id: ID.bcs, extension_type: TypeName.bcs, your_stable_amount: bcs.u64(), extension_supply: bcs.u64()
+
+}) };
+
+ static fromFields<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, fields: Record<string, any> ): MintYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { return MintYourStableWithExtension.reified( typeArg, ).new( { factoryId: decodeFromFields(ID.reified(), fields.factory_id), extensionType: decodeFromFields(TypeName.reified(), fields.extension_type), yourStableAmount: decodeFromFields("u64", fields.your_stable_amount), extensionSupply: decodeFromFields("u64", fields.extension_supply) } ) }
+
+ static fromFieldsWithTypes<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, item: FieldsWithTypes ): MintYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { if (!isMintYourStableWithExtension(item.type)) { throw new Error("not a MintYourStableWithExtension type");
+
+ } assertFieldsWithTypesArgsMatch(item, [typeArg]);
+
+ return MintYourStableWithExtension.reified( typeArg, ).new( { factoryId: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory_id), extensionType: decodeFromFieldsWithTypes(TypeName.reified(), item.fields.extension_type), yourStableAmount: decodeFromFieldsWithTypes("u64", item.fields.your_stable_amount), extensionSupply: decodeFromFieldsWithTypes("u64", item.fields.extension_supply) } ) }
+
+ static fromBcs<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: Uint8Array ): MintYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { return MintYourStableWithExtension.fromFields( typeArg, MintYourStableWithExtension.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ factoryId: this.factoryId,extensionType: this.extensionType.toJSONField(),yourStableAmount: this.yourStableAmount.toString(),extensionSupply: this.extensionSupply.toString(),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, field: any ): MintYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { return MintYourStableWithExtension.reified( typeArg, ).new( { factoryId: decodeFromJSONField(ID.reified(), field.factoryId), extensionType: decodeFromJSONField(TypeName.reified(), field.extensionType), yourStableAmount: decodeFromJSONField("u64", field.yourStableAmount), extensionSupply: decodeFromJSONField("u64", field.extensionSupply) } ) }
+
+ static fromJSON<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, json: Record<string, any> ): MintYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { if (json.$typeName !== MintYourStableWithExtension.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(MintYourStableWithExtension.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
+
+ return MintYourStableWithExtension.fromJSONField( typeArg, json, ) }
+
+ static fromSuiParsedData<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, content: SuiParsedData ): MintYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isMintYourStableWithExtension(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a MintYourStableWithExtension object`); } return MintYourStableWithExtension.fromFieldsWithTypes( typeArg, content ); }
+
+ static fromSuiObjectData<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: SuiObjectData ): MintYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isMintYourStableWithExtension(data.bcs.type)) { throw new Error(`object at is not a MintYourStableWithExtension object`); }
+
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
+
+ return MintYourStableWithExtension.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return MintYourStableWithExtension.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch<YourStable extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: YourStable, id: string ): Promise<MintYourStableWithExtension<ToPhantomTypeArgument<YourStable>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching MintYourStableWithExtension object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isMintYourStableWithExtension(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a MintYourStableWithExtension object`); }
+
+ return MintYourStableWithExtension.fromSuiObjectData( typeArg, res.data ); }
+
+ }
+
+/* ============================== BurnYourStableWithExtension =============================== */
+
+export function isBurnYourStableWithExtension(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::event::BurnYourStableWithExtension` + '<'); }
+
+export interface BurnYourStableWithExtensionFields<YourStable extends PhantomTypeArgument> { factoryId: ToField<ID>; extensionType: ToField<TypeName>; yourStableAmount: ToField<"u64">; extensionSupply: ToField<"u64"> }
+
+export type BurnYourStableWithExtensionReified<YourStable extends PhantomTypeArgument> = Reified< BurnYourStableWithExtension<YourStable>, BurnYourStableWithExtensionFields<YourStable> >;
+
+export class BurnYourStableWithExtension<YourStable extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V1}::event::BurnYourStableWithExtension`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+
+ readonly $typeName = BurnYourStableWithExtension.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::event::BurnYourStableWithExtension<${PhantomToTypeStr<YourStable>}>`; readonly $typeArgs: [PhantomToTypeStr<YourStable>]; readonly $isPhantom = BurnYourStableWithExtension.$isPhantom;
+
+ readonly factoryId: ToField<ID>; readonly extensionType: ToField<TypeName>; readonly yourStableAmount: ToField<"u64">; readonly extensionSupply: ToField<"u64">
+
+ private constructor(typeArgs: [PhantomToTypeStr<YourStable>], fields: BurnYourStableWithExtensionFields<YourStable>, ) { this.$fullTypeName = composeSuiType( BurnYourStableWithExtension.$typeName, ...typeArgs ) as `${typeof PKG_V1}::event::BurnYourStableWithExtension<${PhantomToTypeStr<YourStable>}>`; this.$typeArgs = typeArgs;
+
+ this.factoryId = fields.factoryId;; this.extensionType = fields.extensionType;; this.yourStableAmount = fields.yourStableAmount;; this.extensionSupply = fields.extensionSupply; }
+
+ static reified<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): BurnYourStableWithExtensionReified<ToPhantomTypeArgument<YourStable>> { return { typeName: BurnYourStableWithExtension.$typeName, fullTypeName: composeSuiType( BurnYourStableWithExtension.$typeName, ...[extractType(YourStable)] ) as `${typeof PKG_V1}::event::BurnYourStableWithExtension<${PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>}>`, typeArgs: [ extractType(YourStable) ] as [PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>], isPhantom: BurnYourStableWithExtension.$isPhantom, reifiedTypeArgs: [YourStable], fromFields: (fields: Record<string, any>) => BurnYourStableWithExtension.fromFields( YourStable, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => BurnYourStableWithExtension.fromFieldsWithTypes( YourStable, item, ), fromBcs: (data: Uint8Array) => BurnYourStableWithExtension.fromBcs( YourStable, data, ), bcs: BurnYourStableWithExtension.bcs, fromJSONField: (field: any) => BurnYourStableWithExtension.fromJSONField( YourStable, field, ), fromJSON: (json: Record<string, any>) => BurnYourStableWithExtension.fromJSON( YourStable, json, ), fromSuiParsedData: (content: SuiParsedData) => BurnYourStableWithExtension.fromSuiParsedData( YourStable, content, ), fromSuiObjectData: (content: SuiObjectData) => BurnYourStableWithExtension.fromSuiObjectData( YourStable, content, ), fetch: async (client: SuiClient, id: string) => BurnYourStableWithExtension.fetch( client, YourStable, id, ), new: ( fields: BurnYourStableWithExtensionFields<ToPhantomTypeArgument<YourStable>>, ) => { return new BurnYourStableWithExtension( [extractType(YourStable)], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return BurnYourStableWithExtension.reified }
+
+ static phantom<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): PhantomReified<ToTypeStr<BurnYourStableWithExtension<ToPhantomTypeArgument<YourStable>>>> { return phantom(BurnYourStableWithExtension.reified( YourStable )); } static get p() { return BurnYourStableWithExtension.phantom }
+
+ static get bcs() { return bcs.struct("BurnYourStableWithExtension", {
+
+ factory_id: ID.bcs, extension_type: TypeName.bcs, your_stable_amount: bcs.u64(), extension_supply: bcs.u64()
+
+}) };
+
+ static fromFields<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, fields: Record<string, any> ): BurnYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { return BurnYourStableWithExtension.reified( typeArg, ).new( { factoryId: decodeFromFields(ID.reified(), fields.factory_id), extensionType: decodeFromFields(TypeName.reified(), fields.extension_type), yourStableAmount: decodeFromFields("u64", fields.your_stable_amount), extensionSupply: decodeFromFields("u64", fields.extension_supply) } ) }
+
+ static fromFieldsWithTypes<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, item: FieldsWithTypes ): BurnYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { if (!isBurnYourStableWithExtension(item.type)) { throw new Error("not a BurnYourStableWithExtension type");
+
+ } assertFieldsWithTypesArgsMatch(item, [typeArg]);
+
+ return BurnYourStableWithExtension.reified( typeArg, ).new( { factoryId: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory_id), extensionType: decodeFromFieldsWithTypes(TypeName.reified(), item.fields.extension_type), yourStableAmount: decodeFromFieldsWithTypes("u64", item.fields.your_stable_amount), extensionSupply: decodeFromFieldsWithTypes("u64", item.fields.extension_supply) } ) }
+
+ static fromBcs<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: Uint8Array ): BurnYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { return BurnYourStableWithExtension.fromFields( typeArg, BurnYourStableWithExtension.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ factoryId: this.factoryId,extensionType: this.extensionType.toJSONField(),yourStableAmount: this.yourStableAmount.toString(),extensionSupply: this.extensionSupply.toString(),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, field: any ): BurnYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { return BurnYourStableWithExtension.reified( typeArg, ).new( { factoryId: decodeFromJSONField(ID.reified(), field.factoryId), extensionType: decodeFromJSONField(TypeName.reified(), field.extensionType), yourStableAmount: decodeFromJSONField("u64", field.yourStableAmount), extensionSupply: decodeFromJSONField("u64", field.extensionSupply) } ) }
+
+ static fromJSON<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, json: Record<string, any> ): BurnYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { if (json.$typeName !== BurnYourStableWithExtension.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(BurnYourStableWithExtension.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
+
+ return BurnYourStableWithExtension.fromJSONField( typeArg, json, ) }
+
+ static fromSuiParsedData<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, content: SuiParsedData ): BurnYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isBurnYourStableWithExtension(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a BurnYourStableWithExtension object`); } return BurnYourStableWithExtension.fromFieldsWithTypes( typeArg, content ); }
+
+ static fromSuiObjectData<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: SuiObjectData ): BurnYourStableWithExtension<ToPhantomTypeArgument<YourStable>> { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isBurnYourStableWithExtension(data.bcs.type)) { throw new Error(`object at is not a BurnYourStableWithExtension object`); }
+
+ const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs; if (gotTypeArgs.length !== 1) { throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`); }; const gotTypeArg = compressSuiType(gotTypeArgs[0]); const expectedTypeArg = compressSuiType(extractType(typeArg)); if (gotTypeArg !== compressSuiType(extractType(typeArg))) { throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`); };
+
+ return BurnYourStableWithExtension.fromBcs( typeArg, fromB64(data.bcs.bcsBytes) ); } if (data.content) { return BurnYourStableWithExtension.fromSuiParsedData( typeArg, data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch<YourStable extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArg: YourStable, id: string ): Promise<BurnYourStableWithExtension<ToPhantomTypeArgument<YourStable>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching BurnYourStableWithExtension object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isBurnYourStableWithExtension(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a BurnYourStableWithExtension object`); }
+
+ return BurnYourStableWithExtension.fromSuiObjectData( typeArg, res.data ); }
+
+ }
+
 /* ============================== ClaimReward =============================== */
 
 export function isClaimReward(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::event::ClaimReward` + '<'); }

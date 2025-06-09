@@ -18,6 +18,14 @@ export interface EmitBurnYourStableEventArgs { factoryId: string | TransactionAr
 
 export function emitBurnYourStableEvent( tx: Transaction, typeArg: string, args: EmitBurnYourStableEventArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::event::emit_burn_your_stable_event`, typeArguments: [typeArg], arguments: [ pure(tx, args.factoryId, `${ID.$typeName}`), obj(tx, args.stableCoinType), pure(tx, args.yourStableAmount, `u64`), pure(tx, args.burnedStSbuckAmount, `u64`), pure(tx, args.withdrawalBuck, `u64`), pure(tx, args.factorySupply, `u64`), pure(tx, args.factoryUnderlyingBalance, `u64`) ], }) }
 
+export interface EmitMintYourStableWithExtensionEventArgs { factoryId: string | TransactionArgument; extensionType: TransactionObjectInput; yourStableAmount: bigint | TransactionArgument; extensionSupply: bigint | TransactionArgument }
+
+export function emitMintYourStableWithExtensionEvent( tx: Transaction, typeArg: string, args: EmitMintYourStableWithExtensionEventArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::event::emit_mint_your_stable_with_extension_event`, typeArguments: [typeArg], arguments: [ pure(tx, args.factoryId, `${ID.$typeName}`), obj(tx, args.extensionType), pure(tx, args.yourStableAmount, `u64`), pure(tx, args.extensionSupply, `u64`) ], }) }
+
+export interface EmitBurnYourStableWithExtensionEventArgs { factoryId: string | TransactionArgument; extensionType: TransactionObjectInput; yourStableAmount: bigint | TransactionArgument; extensionSupply: bigint | TransactionArgument }
+
+export function emitBurnYourStableWithExtensionEvent( tx: Transaction, typeArg: string, args: EmitBurnYourStableWithExtensionEventArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::event::emit_burn_your_stable_with_extension_event`, typeArguments: [typeArg], arguments: [ pure(tx, args.factoryId, `${ID.$typeName}`), obj(tx, args.extensionType), pure(tx, args.yourStableAmount, `u64`), pure(tx, args.extensionSupply, `u64`) ], }) }
+
 export interface EmitClaimRewardEventArgs { factory: string | TransactionArgument; stSbuckReward: bigint | TransactionArgument }
 
 export function emitClaimRewardEvent( tx: Transaction, typeArg: string, args: EmitClaimRewardEventArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::event::emit_claim_reward_event`, typeArguments: [typeArg], arguments: [ pure(tx, args.factory, `${ID.$typeName}`), pure(tx, args.stSbuckReward, `u64`) ], }) }

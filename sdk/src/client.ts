@@ -1,9 +1,13 @@
 import { type SuiClient } from "@mysten/sui/client";
-import { Factory, YourStableFactory } from "./_generated/your-stable/factory/structs";
+import {
+  Factory,
+  YourStableFactory,
+} from "./_generated/your-stable/factory/structs";
 import { phantom } from "./_generated/_framework/reified";
 import {
   BUCKET_PROTOCOL_SHARED_OBJECT_REF,
   COIN_TYPE_LIST,
+  CONFIG_SHARED_OBJECT_REF,
   FACTORY_REGISTRY_SHARED_OBJECT_REF,
   FLASK_SHARED_OBJECT_REF,
   FOUNTAIN_SHARED_OBJECT_REF,
@@ -35,7 +39,10 @@ import {
 } from "@mysten/sui/transactions";
 import { devInspectTransaction } from "./utils/transaction";
 import { bcs } from "@mysten/sui/bcs";
-import { batchRedeem, create } from "./_generated/your-stable/redemption-queue/functions";
+import {
+  batchRedeem,
+  create,
+} from "./_generated/your-stable/redemption-queue/functions";
 import { normalizeStructTag } from "@mysten/sui/utils";
 
 export class YourStableClient {
@@ -189,6 +196,7 @@ export class YourStableClient {
   ) {
     const [factory, factoryCap] = new_(tx, yourStableType, {
       registry: tx.sharedObjectRef(FACTORY_REGISTRY_SHARED_OBJECT_REF),
+      config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
       treasuryCap: tx.object(treasuryCapId),
       coinMetadata: tx.object(metadataObjectId),
       limit: tx.pure.u64(limit),
@@ -222,6 +230,7 @@ export class YourStableClient {
       [depositedStableCoinType, this.factory.$typeArgs[0]],
       {
         factory: tx.object(this.factory.id),
+        config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
         vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
         bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
         clock: tx.object.clock(),
@@ -242,6 +251,7 @@ export class YourStableClient {
       [COIN_TYPE_LIST[redeemedStableCoin], this.factory.$typeArgs[0]],
       {
         factory: tx.object(this.factory.id),
+        config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
         bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
         vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
         flask: tx.sharedObjectRef(FLASK_SHARED_OBJECT_REF),
@@ -267,6 +277,7 @@ export class YourStableClient {
       [COIN_TYPE_LIST[redeemedStableCoin], this.factory.$typeArgs[0]],
       {
         factory: tx.object(this.factory.id),
+        config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
         queue: tx.sharedObjectRef(REDEMPTION_QUEUE[redeemedStableCoin]),
         bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
         vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
@@ -287,7 +298,7 @@ export class YourStableClient {
     tx: Transaction,
     redeemedStableCoin: SUPPORTED_REDEMPTION_COIN,
     batchStart: null | bigint,
-    batchSize: bigint
+    batchSize: bigint,
   ) {
     batchRedeem(
       tx,
@@ -296,8 +307,8 @@ export class YourStableClient {
         queue: tx.sharedObjectRef(REDEMPTION_QUEUE[redeemedStableCoin]),
         bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
         clock: tx.object.clock(),
-        batchStart: tx.pure.option('u64', batchStart),
-        batchSize: tx.pure.u64(batchSize)
+        batchStart: tx.pure.option("u64", batchStart),
+        batchSize: tx.pure.u64(batchSize),
       },
     );
   }
@@ -307,6 +318,7 @@ export class YourStableClient {
     const stSbuckCoin = claimReward(tx, this.factory.$typeArgs[0], {
       cap: tx.object(this.factoryCap),
       factory: tx.object(this.factory.id),
+      config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
       vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
       clock: tx.object.clock(),
     });
@@ -327,6 +339,7 @@ export class YourStableClient {
     updateMetadata(tx, this.factory.$typeArgs[0], {
       cap: tx.object(this.factoryCap),
       factory: tx.object(this.factory.id),
+      config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
       metadata: tx.object(metadataObjectId),
       name: tx.pure.option("string", input?.name || null),
       symbol: tx.pure.option("string", input?.symbol || null),
@@ -339,6 +352,7 @@ export class YourStableClient {
     setBasicLimit(tx, this.factory.$typeArgs[0], {
       cap: tx.object(this.factoryCap),
       factory: tx.object(this.factory.id),
+      config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
       limit: tx.pure.u64(limit),
     });
   }
@@ -351,6 +365,7 @@ export class YourStableClient {
     setExtensionLimit(tx, [this.factory.$typeArgs[0], witnessType], {
       cap: tx.object(this.factoryCap),
       factory: tx.object(this.factory.id),
+      config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
       limit: tx.pure.u64(limit),
     });
   }

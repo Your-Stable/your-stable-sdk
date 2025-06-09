@@ -1,13 +1,20 @@
 import { normalizeSuiAddress } from "@mysten/sui/utils";
 
 export const YOUR_STABLE_PACKAGE_UPGRADE_CAP =
-  "0xa5232fdc9db429bdea5cd7ce0448cbcfa9002da8c5377d4b489a846ea6d0a84b";
+  "0xef4a4dbf7e76eb1fcbb150721ec34f45c9610f729f366ca7a14c84372289f7fb";
 
 export const FACTORY_REGISTRY_SHARED_OBJECT_REF = {
   objectId:
-    "0x08cbafc235ddeacdd45cc01978d2709696eab2bec67116244e6442b5ab9baa8c",
+    "0x5b028d014655ea41f9fbd0af35d3bfd78659a77b651ea52cff4cda7823bbb300",
   initialSharedVersion: 566040178,
   mutable: true,
+};
+
+export const CONFIG_SHARED_OBJECT_REF = {
+  objectId:
+    "0x5f35aaedcb0b46c6cd6631b17b7196285191281c8943e53678309c4fbb49c801",
+  initialSharedVersion: 570210140,
+  mutable: false,
 };
 
 export type SUPPORTED_REDEMPTION_COIN = "USDC";
@@ -25,8 +32,8 @@ export const REDEMPTION_QUEUE: Record<
 > = {
   USDC: {
     objectId:
-      "0xe44db67809daaed5099fdf554b9103048a52d57773129099c5caaeeaa7efffb5",
-    initialSharedVersion: 566595437,
+      "0x776bdff8fe47dfddcbde6039abd383d0571fbd4b8ac96f49443c0152fd4001f2",
+    initialSharedVersion: 572923832,
     mutable: true,
   },
 };

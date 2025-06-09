@@ -6,7 +6,7 @@ export const YOUR_STABLE_PACKAGE_UPGRADE_CAP =
 export const FACTORY_REGISTRY_SHARED_OBJECT_REF = {
   objectId:
     "0x5b028d014655ea41f9fbd0af35d3bfd78659a77b651ea52cff4cda7823bbb300",
-  initialSharedVersion: 566040178,
+  initialSharedVersion: 570210140,
   mutable: true,
 };
 

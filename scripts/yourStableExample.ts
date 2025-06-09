@@ -18,17 +18,17 @@ export async function createFactory() {
 
   // update the config for minted yourStable info
   const config = {
-    // yourStableCoinType:
-    //   "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD",
-    yourStableCoinType: "",
-    // treasuryCapId:
-    //   "0x172bcfc5c5b37b55d09ce6878e645b4bd1677ce82927090b841415c767e3384a",
-    treasuryCapId: "",
-    // metadataObjectId:
-    // "0xf3a64dd59356c14fb946c69fdabf225fc3c5c89a611a3511afc16e1c8b67d7ae",
-    metadataObjectId: "",
-    // supplyLimit: BigInt(1000 * 10 ** YourStableClient.underlyingDecimal),
-    supplyLimit: BigInt(0),
+    yourStableCoinType:
+      "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD",
+    // yourStableCoinType: "",
+    treasuryCapId:
+      "0x82004b20e7d6b78eceeb61fc69d2c3e5a10a9e4448d37a2876e67fe5059741ce",
+    // treasuryCapId: "",
+    metadataObjectId:
+    "0x9aa8e18af0d91d6be64c9478ad6ef01e513720664b816545aed79071014a2d62",
+    // metadataObjectId: "",
+    supplyLimit: BigInt(10000 * 10 ** YourStableClient.underlyingDecimal),
+    // supplyLimit: BigInt(0),
   };
 
   const [factory, factoryCap] = YourStableClient.createFactoryMoveCall(
@@ -351,4 +351,4 @@ async function getYourStableFactory() {
   });
 }
 
-batchRedeem().catch(console.error);
+createFactory().catch(console.error);

@@ -8,7 +8,7 @@ import {
 } from "your-stable-sdk";
 import { loadSigner, logger } from ".";
 import { getInputCoins } from "./utils";
-import { Factory } from "your-stable-sdk/_generated/factory/structs.js";
+import { Factory } from "your-stable-sdk/_generated/your-stable/factory/structs";
 
 const suiClient = new SuiClient({ url: getFullnodeUrl("mainnet") });
 
@@ -25,7 +25,7 @@ export async function createFactory() {
       "0x82004b20e7d6b78eceeb61fc69d2c3e5a10a9e4448d37a2876e67fe5059741ce",
     // treasuryCapId: "",
     metadataObjectId:
-    "0x9aa8e18af0d91d6be64c9478ad6ef01e513720664b816545aed79071014a2d62",
+      "0x9aa8e18af0d91d6be64c9478ad6ef01e513720664b816545aed79071014a2d62",
     // metadataObjectId: "",
     supplyLimit: BigInt(10000 * 10 ** YourStableClient.underlyingDecimal),
     // supplyLimit: BigInt(0),
@@ -73,7 +73,7 @@ export async function mintYourStable() {
   const signer = loadSigner();
 
   const yourStableCoinType =
-    "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
+    "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
 
   // create Factory instance
   const factory = await YourStableClient.initialize(
@@ -122,7 +122,7 @@ export async function burnYourStable() {
   const signer = loadSigner();
 
   const yourStableCoinType =
-    "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
+    "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
 
   // create Factory instance
   const factory = await YourStableClient.initialize(
@@ -171,7 +171,7 @@ export async function burnAndRedeemYourStable(
   const signer = loadSigner();
 
   const yourStableCoinType =
-    "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
+    "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
 
   // create Factory instance
   const factory = await YourStableClient.initialize(
@@ -222,7 +222,7 @@ export async function claimReward() {
   const signer = loadSigner();
 
   const yourStableCoinType =
-    "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
+    "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
 
   const factory = await YourStableClient.initialize(
     suiClient,
@@ -252,7 +252,7 @@ export async function batchRedeem() {
   const signer = loadSigner();
 
   const yourStableCoinType =
-    "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
+    "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
 
   const factory = await YourStableClient.initialize(
     suiClient,
@@ -260,7 +260,7 @@ export async function batchRedeem() {
   );
 
   const tx = new Transaction();
-  factory.batchRedeem(tx, 'USDC', null, BigInt(100))
+  factory.batchRedeem(tx, "USDC", null, BigInt(100));
 
   const dryRunResponse = await dryRun(suiClient, tx, signer.toSuiAddress());
 
@@ -281,7 +281,7 @@ export async function setBaseLimit() {
   const signer = loadSigner();
 
   const yourStableCoinType =
-    "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
+    "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
 
   const factory = await YourStableClient.initialize(
     suiClient,
@@ -306,9 +306,48 @@ export async function setBaseLimit() {
   }
 }
 
+export async function updateMetadata() {
+  const signer = loadSigner();
+
+  const yourStableCoinType =
+    "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
+
+  // create Factory instance
+  const factory = await YourStableClient.initialize(
+    suiClient,
+    yourStableCoinType,
+  );
+
+  logger.info("Interacting with Factory:");
+  logger.info({ factory });
+
+  const tx = new Transaction();
+  const metadataObjectId =
+    "0x9aa8e18af0d91d6be64c9478ad6ef01e513720664b816545aed79071014a2d62";
+  factory.updateMetadataMoveCall(tx, metadataObjectId, {
+    iconUrl:
+      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPCEtLSBPdXRlciBjaXJjbGUgLS0+CiAgPGNpcmNsZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI5NSIgZmlsbD0iYmxhY2siIHN0cm9rZT0ibm9uZSIvPgogIAogIDwhLS0gSW5uZXIgY2lyY2xlIC0tPgogIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iODAiIGZpbGw9IndoaXRlIiBzdHJva2U9Im5vbmUiLz4KICA8IS0tIExhcmdlICJKIiBpbiB0aGUgY2VudGVyIC0tPgogIDx0ZXh0IHg9IjEwMCIgeT0iMTMwIiBmb250LWZhbWlseT0ic2VyaWYiIGZvbnQtc2l6ZT0iODYiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIAogICAgICAgIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9ImJsYWNrIj5KPC90ZXh0PgogIAogIDwhLS0gIlVTRCIgdGV4dCBiZWxvdyB0aGUgSiAtLT4KICA8dGV4dCB4PSIxMDAiIHk9IjE1NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSIzMDAiIAogICAgICAgIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9ImJsYWNrIiBvcGFjaXR5PSIwLjciPlVTRDwvdGV4dD4KICA8IS0tIFNpbXBsZSBib3JkZXIgcmluZyAtLT4KICA8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9Ijg3IiBmaWxsPSJub25lIiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjEiIG9wYWNpdHk9IjAuMiIvPgo8L3N2Zz4=",
+  });
+
+  const dryRunResponse = await dryRun(suiClient, tx, signer.toSuiAddress());
+  logger.info({ dryRunResponse });
+
+  if (dryRunResponse.dryrunRes.effects.status.status === "success") {
+    // execute transaction if it's proper
+    const response = await suiClient.signAndExecuteTransaction({
+      transaction: tx,
+      signer,
+    });
+
+    logger.info({ response });
+  } else {
+    logger.error(dryRunResponse.dryrunRes.effects.status.error);
+  }
+}
+
 async function getYourStableFactory() {
   const yourStableCoinType =
-    "0xce3201eab9a726748eb46dd16fa20005dadcc287d066f845c2f3e163d3bc090c::jusd::JUSD";
+    "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
 
   // create Factory instance
   const factory = await YourStableClient.initialize(
@@ -326,7 +365,7 @@ async function getYourStableFactory() {
     factory.getUnderlyingSTSBUCKBalance(),
   );
   const underlyingSTSBUCKReserve =
-    Number(factory.getUnderlyingSTSBuckReserve()) / 10 ** 9;
+    Number(await factory.getUnderlyingSTSBuckReserve()) / 10 ** 9;
   const rewardSTSBuckAmount =
     Number(await factory.getRewardsSTSBuckAmount()) / 10 ** 9;
   const rewardsBuckAmount =
@@ -351,4 +390,4 @@ async function getYourStableFactory() {
   });
 }
 
-createFactory().catch(console.error);
+getYourStableFactory().catch(console.error);

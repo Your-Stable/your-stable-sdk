@@ -132,7 +132,8 @@ export class YourStableClient {
   }
 
   async getUnderlyingSTSBuckReserve() {
-    return this.getQuotedStSBuckAmountByStableCoinAmount(
+    return YourStableClient.getQuotedStSBuckAmountByStableCoinAmount(
+      this.client,
       this.factory.basicSupply.supply,
     );
   }
@@ -158,7 +159,10 @@ export class YourStableClient {
     return value ? BigInt(bcs.u64().parse(new Uint8Array(value))) : BigInt(0);
   }
 
-  async getQuotedStSBuckAmountByStableCoinAmount(stableAmount: bigint) {
+  static async getQuotedStSBuckAmountByStableCoinAmount(
+    suiClient: SuiClient,
+    stableAmount: bigint,
+  ) {
     const tx = new Transaction();
 
     toUnderlyingAmount(tx, {
@@ -167,12 +171,15 @@ export class YourStableClient {
       stableAmount,
     });
 
-    const devInspectResponse = await devInspectTransaction(this.client, tx);
+    const devInspectResponse = await devInspectTransaction(suiClient, tx);
     const value = devInspectResponse?.results?.[0]?.returnValues?.[0][0];
     return value ? BigInt(bcs.u64().parse(new Uint8Array(value))) : BigInt(0);
   }
 
-  async getQuotedStableCoinAmountByStSBuckAmount(stSBuckAmount: bigint) {
+  static async getQuotedStableCoinAmountByStSBuckAmount(
+    suiClient: SuiClient,
+    stSBuckAmount: bigint,
+  ) {
     const tx = new Transaction();
 
     fromUnderlyingAmount(tx, {
@@ -181,7 +188,7 @@ export class YourStableClient {
       underlyingAmount: stSBuckAmount,
     });
 
-    const devInspectResponse = await devInspectTransaction(this.client, tx);
+    const devInspectResponse = await devInspectTransaction(suiClient, tx);
     const value = devInspectResponse?.results?.[0]?.returnValues?.[0][0];
     return value ? BigInt(bcs.u64().parse(new Uint8Array(value))) : BigInt(0);
   }
@@ -294,7 +301,7 @@ export class YourStableClient {
     return buckCoin;
   }
 
-  batchRedeem(
+  static batchRedeem(
     tx: Transaction,
     redeemedStableCoin: SUPPORTED_REDEMPTION_COIN,
     batchStart: null | bigint,

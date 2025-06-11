@@ -33,4 +33,4 @@ newPackageJson["types"] = "./index.js";
 fs.writeFileSync("./dist/package.json", JSON.stringify(newPackageJson), "utf8");
 
 // 2. Copy README.md
-fs.cpSync("./README.md", "./dist/README.md");
+fs.cpSync("../README.md", "./dist/README.md");

@@ -210,24 +210,41 @@ async function updateMetadata() {
 ### Get Factory Information
 
 ```typescript
-async function getYourStableFactory() {
-  const yourStableCoinType = "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
-  
+  const yourStableCoinType =
+    "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
+
+  // create Factory instance
   const factory = await YourStableClient.initialize(
     suiClient,
     yourStableCoinType,
   );
 
-  // Get information about the factory
-  const yourStableTotalSupply = Number(await factory.getYourStableTotalSupply()) / 10 ** 9;
-  const yourStableBasicSupply = Number(await factory.getYourStableBasicSupply()) / 10 ** 9;
-  const yourStableExtensionSupplies = await factory.getYourStableExtensionSupplies();
-  const underlyingSTSBUCKBalance = Number(factory.getUnderlyingSTSBUCKBalance());
-  const underlyingSTSBUCKReserve = Number(await factory.getUnderlyingSTSBuckReserve()) / 10 ** 9;
-  const rewardSTSBuckAmount = Number(await factory.getRewardsSTSBuckAmount()) / 10 ** 9;
-  const rewardsBuckAmount = Number(await factory.getRewardsBuckAmount()) / 10 ** 9;
-  
-  console.log({
+  const yourStableTotalSupply =
+    Number(await factory.getYourStableTotalSupply()) / 10 ** 9;
+  const yourStableBasicSupply =
+    Number(await factory.getYourStableBasicSupply()) / 10 ** 9;
+  const yourStableExtensionSupplies =
+    await factory.getYourStableExtensionSupplies();
+  const underlyingSTSBUCKBalance = Number(
+    factory.getUnderlyingSTSBUCKBalance(),
+  );
+  const underlyingSTSBUCKReserve =
+    Number(await factory.getUnderlyingSTSBuckReserve()) / 10 ** 9;
+  const rewardSTSBuckAmount =
+    Number(await factory.getRewardsSTSBuckAmount()) / 10 ** 9;
+  const rewardsBuckAmount =
+    Number(await factory.getRewardsBuckAmount()) / 10 ** 9;
+  const quotedBuckFromUnderlyingSTSBuckBalance =
+    Number(
+      await YourStableClient.getQuotedStableCoinAmountByStSBuckAmount(
+        suiClient,
+        BigInt(underlyingSTSBUCKBalance),
+      ),
+    ) /
+    10 ** 9;
+  const tickets = await YourStableClient.getTicketInfos(suiClient, "USDC", 100);
+
+  logger.info({
     yourStableTotalSupply,
     yourStableBasicSupply,
     yourStableExtensionSupplies,
@@ -235,8 +252,9 @@ async function getYourStableFactory() {
     underlyingSTSBUCKReserve,
     rewardSTSBuckAmount,
     rewardsBuckAmount,
+    quotedBuckFromUnderlyingSTSBuckBalance,
+    tickets,
   });
-}
 ```
 
 ## Additional Features

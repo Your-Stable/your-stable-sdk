@@ -86,14 +86,18 @@ export class YourStableClient {
       factoryId,
     );
 
+    await YourStableClient.updateToLatestPackage(client);
+
+    return new YourStableClient(client, factory, factoryCapId);
+  }
+
+  static async updateToLatestPackage(suiClient: SuiClient) {
     const latestPackageId = await getLatestPackageId(
-      client,
+      suiClient,
       YOUR_STABLE_PACKAGE_UPGRADE_CAP,
     );
 
     setPublishedAt(latestPackageId);
-
-    return new YourStableClient(client, factory, factoryCapId);
   }
 
   // --- Getter ---

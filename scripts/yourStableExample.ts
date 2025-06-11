@@ -370,6 +370,7 @@ async function getYourStableFactory() {
       ),
     ) /
     10 ** 9;
+  const tickets = await YourStableClient.getTicketInfos(suiClient, "USDC", 100);
 
   logger.info({
     yourStableTotalSupply,
@@ -380,6 +381,7 @@ async function getYourStableFactory() {
     rewardSTSBuckAmount,
     rewardsBuckAmount,
     quotedBuckFromUnderlyingSTSBuckBalance,
+    tickets,
   });
 }
 

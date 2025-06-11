@@ -251,16 +251,8 @@ export async function claimReward() {
 export async function batchRedeem() {
   const signer = loadSigner();
 
-  const yourStableCoinType =
-    "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
-
-  const factory = await YourStableClient.initialize(
-    suiClient,
-    yourStableCoinType,
-  );
-
   const tx = new Transaction();
-  factory.batchRedeem(tx, "USDC", null, BigInt(100));
+  YourStableClient.batchRedeem(tx, "USDC", null, BigInt(100));
 
   const dryRunResponse = await dryRun(suiClient, tx, signer.toSuiAddress());
 
@@ -372,7 +364,8 @@ async function getYourStableFactory() {
     Number(await factory.getRewardsBuckAmount()) / 10 ** 9;
   const quotedBuckFromUnderlyingSTSBuckBalance =
     Number(
-      await factory.getQuotedStableCoinAmountByStSBuckAmount(
+      await YourStableClient.getQuotedStableCoinAmountByStSBuckAmount(
+        suiClient,
         BigInt(underlyingSTSBUCKBalance),
       ),
     ) /

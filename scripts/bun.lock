@@ -7,7 +7,7 @@
         "@mysten/sui": "^1.24.0",
         "dotenv": "^16.5.0",
         "pino": "^9.7.0",
-        "your-stable-sdk": "^0.1.10",
+        "your-stable-sdk": "^0.1.11",
       },
       "devDependencies": {
         "@types/bun": "latest",
@@ -119,6 +119,6 @@
 
     "wrappy": ["wrappy@1.0.2", "", {}, "sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ=="],
 
-    "your-stable-sdk": ["your-stable-sdk@0.1.10", "", { "peerDependencies": { "@mysten/sui": "^1.30.1" } }, "sha512-D9pBTNXa6qxNJuF5wwwIMvwMkA1sRlvEyIVCwttmbc2Yh3edUpeE9ZJ+vau+hcUiPkEUch2M9+XDaWpGAzuMSg=="],
+    "your-stable-sdk": ["your-stable-sdk@0.1.11", "", { "peerDependencies": { "@mysten/sui": "^1.30.1" } }, "sha512-qnIsXW16aP9fPcbNic/DN+bmMtVj0lM6fwWvMueodihJ28KqP78oln8Sat8zSWNgErWuR9AjZPH9+9QsHUDMsQ=="],
   }
 }

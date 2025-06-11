@@ -262,6 +262,24 @@ if (dryRunResponse.dryrunRes.effects.status.status === "success") {
 }
 ```
 
-## License
+# ⚠️ Important: Package ID Updates
 
-MIT
+> **Warning:** Static utility functions may not track the latest package ID automatically.
+
+When using static utility functions such as:
+- `getQuotedStSBuckAmountByStableCoinAmount`
+- `batchRedeem`
+
+These functions are exported as static methods for external usage convenience, but they **will not automatically track the latest updated package ID** for subsequent `moveCall` operations.
+
+## How to Update Package ID
+
+To ensure you're using the most current package ID, you have two options:
+
+1. **Execute the initialize function** with your specific stable coin type
+2. **Call `getLatestPackageId()`** to retrieve the current package ID
+
+## Why This Matters
+
+Without updating to the latest package ID, your subsequent move calls may fail or reference outdated contract versions. Always ensure you're working with the current package ID before performing critical operations.
+

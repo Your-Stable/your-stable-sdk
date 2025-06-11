@@ -42,8 +42,10 @@ import { bcs } from "@mysten/sui/bcs";
 import {
   batchRedeem,
   create,
+  getTickets,
 } from "./_generated/your-stable/redemption-queue/functions";
 import { normalizeStructTag } from "@mysten/sui/utils";
+import { RedemptionTicketInfo } from "./_generated/your-stable/redemption-queue/structs";
 
 export class YourStableClient {
   factory: Factory<string>;
@@ -195,6 +197,50 @@ export class YourStableClient {
     const devInspectResponse = await devInspectTransaction(suiClient, tx);
     const value = devInspectResponse?.results?.[0]?.returnValues?.[0][0];
     return value ? BigInt(bcs.u64().parse(new Uint8Array(value))) : BigInt(0);
+  }
+
+  static async getTicketInfos(
+    suiClient: SuiClient,
+    stableCoin: SUPPORTED_REDEMPTION_COIN,
+    pageSize: number = 1000,
+    cursor?: number,
+  ) {
+    const tx = new Transaction();
+
+    getTickets(tx, [COIN_TYPE_LIST[stableCoin], YourStableFactory.$typeName], {
+      queue: tx.sharedObjectRef(REDEMPTION_QUEUE[stableCoin]),
+      cursor: cursor ? tx.pure.u64(cursor) : null,
+      pageSize: tx.pure.u64(pageSize),
+    });
+
+    try {
+      const devInspectResponse = await devInspectTransaction(suiClient, tx);
+
+      if (devInspectResponse.effects.status.status === "success") {
+        const returnValues = devInspectResponse?.results?.[0]?.returnValues;
+        if (!returnValues || returnValues?.[0]?.[0][0] === 0) {
+          return [];
+        } else {
+          // RedemptionTicketInfos
+          const redemptionTicketInfos = returnValues[0];
+          if (!redemptionTicketInfos) return [];
+          // cursor
+          const cursor = returnValues[1];
+          if (!cursor) return [];
+
+          const value = redemptionTicketInfos[0];
+          return bcs
+            .vector(RedemptionTicketInfo.bcs)
+            .parse(Uint8Array.from(value as Iterable<number>));
+        }
+      } else {
+        return [];
+      }
+    } catch (error) {
+      console.error(error);
+
+      return [];
+    }
   }
 
   // --- Move call ---

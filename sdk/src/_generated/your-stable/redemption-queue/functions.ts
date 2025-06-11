@@ -64,3 +64,15 @@ export function ticketRecipient( tx: Transaction, ticket: TransactionObjectInput
 export function ticketBalance( tx: Transaction, ticket: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::redemption_queue::ticket_balance`, arguments: [ obj(tx, ticket) ], }) }
 
 export function timeToRedeem( tx: Transaction, ticket: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::redemption_queue::time_to_redeem`, arguments: [ obj(tx, ticket) ], }) }
+
+export function ticketInfoId( tx: Transaction, redemptionTickInfo: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::redemption_queue::ticket_info_id`, arguments: [ obj(tx, redemptionTickInfo) ], }) }
+
+export function ticketInfoRecipient( tx: Transaction, redemptionTickInfo: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::redemption_queue::ticket_info_recipient`, arguments: [ obj(tx, redemptionTickInfo) ], }) }
+
+export function ticketInfoBalance( tx: Transaction, redemptionTickInfo: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::redemption_queue::ticket_info_balance`, arguments: [ obj(tx, redemptionTickInfo) ], }) }
+
+export function ticketInfoTimeToRedeem( tx: Transaction, redemptionTickInfo: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::redemption_queue::ticket_info_time_to_redeem`, arguments: [ obj(tx, redemptionTickInfo) ], }) }
+
+export interface GetTicketsArgs { queue: TransactionObjectInput; cursor: (bigint | TransactionArgument | TransactionArgument | null); pageSize: bigint | TransactionArgument }
+
+export function getTickets( tx: Transaction, typeArgs: [string, string], args: GetTicketsArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::redemption_queue::get_tickets`, typeArguments: typeArgs, arguments: [ obj(tx, args.queue), pure(tx, args.cursor, `${Option.$typeName}<u64>`), pure(tx, args.pageSize, `u64`) ], }) }

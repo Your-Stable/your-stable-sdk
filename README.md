@@ -277,7 +277,7 @@ These functions are exported as static methods for external usage convenience, b
 To ensure you're using the most current package ID, you have two options:
 
 1. **Execute the `initialize` function** with your specific stable coin type
-2. **Call `setPublishedAt()`** to retrieve the current package ID
+2. **Call `YourStableClient.updateToLatestPackage()`** to retrieve and to the latest package ID
 
 ## Why This Matters
 

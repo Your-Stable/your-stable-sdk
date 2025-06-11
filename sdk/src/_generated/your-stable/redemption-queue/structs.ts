@@ -6,7 +6,7 @@ import {UID} from "../../_dependencies/source/0x2/object/structs";
 import {BUCK} from "../../_dependencies/source/0xce7ff77a83ea0cb6fd39bd8748e2ec89a3f41e8efdc3f4eb123e0ca37b184db2/buck/structs";
 import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructClass, ToField, ToPhantomTypeArgument, ToTypeStr, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, fieldToJSON, phantom, ToTypeStr as ToPhantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../_framework/util";
-import {PKG_V1} from "../index";
+import {PKG_V1, PKG_V2} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
@@ -284,5 +284,73 @@ export class RedeemRequest<U extends PhantomTypeArgument, R extends PhantomTypeA
  static async fetch<U extends PhantomReified<PhantomTypeArgument>, R extends PhantomReified<PhantomTypeArgument>>( client: SuiClient, typeArgs: [U, R], id: string ): Promise<RedeemRequest<ToPhantomTypeArgument<U>, ToPhantomTypeArgument<R>>> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching RedeemRequest object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isRedeemRequest(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a RedeemRequest object`); }
 
  return RedeemRequest.fromSuiObjectData( typeArgs, res.data ); }
+
+ }
+
+/* ============================== RedemptionTicketInfo =============================== */
+
+export function isRedemptionTicketInfo(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V2}::redemption_queue::RedemptionTicketInfo`; }
+
+export interface RedemptionTicketInfoFields { ticketId: ToField<"u64">; recipient: ToField<"address">; balance: ToField<"u64">; timeToRedeem: ToField<"u64"> }
+
+export type RedemptionTicketInfoReified = Reified< RedemptionTicketInfo, RedemptionTicketInfoFields >;
+
+export class RedemptionTicketInfo implements StructClass { __StructClass = true as const;
+
+ static readonly $typeName = `${PKG_V2}::redemption_queue::RedemptionTicketInfo`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+
+ readonly $typeName = RedemptionTicketInfo.$typeName; readonly $fullTypeName: `${typeof PKG_V2}::redemption_queue::RedemptionTicketInfo`; readonly $typeArgs: []; readonly $isPhantom = RedemptionTicketInfo.$isPhantom;
+
+ readonly ticketId: ToField<"u64">; readonly recipient: ToField<"address">; readonly balance: ToField<"u64">; readonly timeToRedeem: ToField<"u64">
+
+ private constructor(typeArgs: [], fields: RedemptionTicketInfoFields, ) { this.$fullTypeName = composeSuiType( RedemptionTicketInfo.$typeName, ...typeArgs ) as `${typeof PKG_V2}::redemption_queue::RedemptionTicketInfo`; this.$typeArgs = typeArgs;
+
+ this.ticketId = fields.ticketId;; this.recipient = fields.recipient;; this.balance = fields.balance;; this.timeToRedeem = fields.timeToRedeem; }
+
+ static reified( ): RedemptionTicketInfoReified { return { typeName: RedemptionTicketInfo.$typeName, fullTypeName: composeSuiType( RedemptionTicketInfo.$typeName, ...[] ) as `${typeof PKG_V2}::redemption_queue::RedemptionTicketInfo`, typeArgs: [ ] as [], isPhantom: RedemptionTicketInfo.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => RedemptionTicketInfo.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => RedemptionTicketInfo.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => RedemptionTicketInfo.fromBcs( data, ), bcs: RedemptionTicketInfo.bcs, fromJSONField: (field: any) => RedemptionTicketInfo.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => RedemptionTicketInfo.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => RedemptionTicketInfo.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => RedemptionTicketInfo.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => RedemptionTicketInfo.fetch( client, id, ), new: ( fields: RedemptionTicketInfoFields, ) => { return new RedemptionTicketInfo( [], fields ) }, kind: "StructClassReified", } }
+
+ static get r() { return RedemptionTicketInfo.reified() }
+
+ static phantom( ): PhantomReified<ToTypeStr<RedemptionTicketInfo>> { return phantom(RedemptionTicketInfo.reified( )); } static get p() { return RedemptionTicketInfo.phantom() }
+
+ static get bcs() { return bcs.struct("RedemptionTicketInfo", {
+
+ ticket_id: bcs.u64(), recipient: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), }), balance: bcs.u64(), time_to_redeem: bcs.u64()
+
+}) };
+
+ static fromFields( fields: Record<string, any> ): RedemptionTicketInfo { return RedemptionTicketInfo.reified( ).new( { ticketId: decodeFromFields("u64", fields.ticket_id), recipient: decodeFromFields("address", fields.recipient), balance: decodeFromFields("u64", fields.balance), timeToRedeem: decodeFromFields("u64", fields.time_to_redeem) } ) }
+
+ static fromFieldsWithTypes( item: FieldsWithTypes ): RedemptionTicketInfo { if (!isRedemptionTicketInfo(item.type)) { throw new Error("not a RedemptionTicketInfo type");
+
+ }
+
+ return RedemptionTicketInfo.reified( ).new( { ticketId: decodeFromFieldsWithTypes("u64", item.fields.ticket_id), recipient: decodeFromFieldsWithTypes("address", item.fields.recipient), balance: decodeFromFieldsWithTypes("u64", item.fields.balance), timeToRedeem: decodeFromFieldsWithTypes("u64", item.fields.time_to_redeem) } ) }
+
+ static fromBcs( data: Uint8Array ): RedemptionTicketInfo { return RedemptionTicketInfo.fromFields( RedemptionTicketInfo.bcs.parse(data) ) }
+
+ toJSONField() { return {
+
+ ticketId: this.ticketId.toString(),recipient: this.recipient,balance: this.balance.toString(),timeToRedeem: this.timeToRedeem.toString(),
+
+} }
+
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
+
+ static fromJSONField( field: any ): RedemptionTicketInfo { return RedemptionTicketInfo.reified( ).new( { ticketId: decodeFromJSONField("u64", field.ticketId), recipient: decodeFromJSONField("address", field.recipient), balance: decodeFromJSONField("u64", field.balance), timeToRedeem: decodeFromJSONField("u64", field.timeToRedeem) } ) }
+
+ static fromJSON( json: Record<string, any> ): RedemptionTicketInfo { if (json.$typeName !== RedemptionTicketInfo.$typeName) { throw new Error("not a WithTwoGenerics json object") };
+
+ return RedemptionTicketInfo.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): RedemptionTicketInfo { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isRedemptionTicketInfo(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a RedemptionTicketInfo object`); } return RedemptionTicketInfo.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): RedemptionTicketInfo { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isRedemptionTicketInfo(data.bcs.type)) { throw new Error(`object at is not a RedemptionTicketInfo object`); }
+
+ return RedemptionTicketInfo.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return RedemptionTicketInfo.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<RedemptionTicketInfo> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching RedemptionTicketInfo object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isRedemptionTicketInfo(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a RedemptionTicketInfo object`); }
+
+ return RedemptionTicketInfo.fromSuiObjectData( res.data ); }
 
  }

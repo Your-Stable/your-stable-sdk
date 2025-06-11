@@ -29,6 +29,7 @@ loader.register(redemptionQueue.RedemptionQueueW);
 loader.register(redemptionQueue.RedemptionTicket);
 loader.register(redemptionQueue.RedemptionQueue);
 loader.register(redemptionQueue.RedeemRequest);
+loader.register(redemptionQueue.RedemptionTicketInfo);
 loader.register(registry.Deployments);
 loader.register(registry.Registry);
  }

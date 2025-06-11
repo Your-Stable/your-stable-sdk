@@ -219,27 +219,35 @@ export class YourStableClient {
       if (devInspectResponse.effects.status.status === "success") {
         const returnValues = devInspectResponse?.results?.[0]?.returnValues;
         if (!returnValues || returnValues?.[0]?.[0][0] === 0) {
-          return [];
+          return { tickets: [], cursor: null };
         } else {
           // RedemptionTicketInfos
-          const redemptionTicketInfos = returnValues[0];
-          if (!redemptionTicketInfos) return [];
+          const redemptionTicketInfos = returnValues?.[0];
+          if (!redemptionTicketInfos) return { tickets: [], cursor: null };
           // cursor
-          const cursor = returnValues[1];
-          if (!cursor) return [];
+          const cursorData = returnValues?.[1];
+          if (!cursorData) return { tickets: [], cursor: null };
 
-          const value = redemptionTicketInfos[0];
-          return bcs
+          const tickets = bcs
             .vector(RedemptionTicketInfo.bcs)
-            .parse(Uint8Array.from(value as Iterable<number>));
+            .parse(Uint8Array.from(redemptionTicketInfos[0]));
+
+          const cursor = bcs
+            .option(bcs.U64)
+            .parse(Uint8Array.from(cursorData[0]));
+
+          return {
+            tickets,
+            cursor,
+          };
         }
       } else {
-        return [];
+        return { tickets: [], cursor: null };
       }
     } catch (error) {
       console.error(error);
 
-      return [];
+      return { tickets: [], cursor: null };
     }
   }
 

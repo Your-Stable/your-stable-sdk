@@ -12,37 +12,29 @@ import { Factory } from "your-stable-sdk/_generated/your-stable/factory/structs"
 
 const suiClient = new SuiClient({ url: getFullnodeUrl("mainnet") });
 
-export async function createFactory() {
+export async function createFactory(input: {
+  yourStableCoinType: string;
+  treasuryCapId: string;
+  metadataObjectId: string;
+  supplyLimit: bigint;
+}) {
   const signer = loadSigner();
   const tx = new Transaction();
 
   // update the config for minted yourStable info
-  const config = {
-    yourStableCoinType:
-      "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD",
-    // yourStableCoinType: "",
-    treasuryCapId:
-      "0x82004b20e7d6b78eceeb61fc69d2c3e5a10a9e4448d37a2876e67fe5059741ce",
-    // treasuryCapId: "",
-    metadataObjectId:
-      "0x9aa8e18af0d91d6be64c9478ad6ef01e513720664b816545aed79071014a2d62",
-    // metadataObjectId: "",
-    supplyLimit: BigInt(10000 * 10 ** YourStableClient.underlyingDecimal),
-    // supplyLimit: BigInt(0),
-  };
+  const { yourStableCoinType, treasuryCapId, metadataObjectId, supplyLimit } =
+    input;
 
   const [factory, factoryCap] = YourStableClient.createFactoryMoveCall(
     tx,
-    config.yourStableCoinType,
-    config.treasuryCapId,
-    config.metadataObjectId,
-    config.supplyLimit,
+    yourStableCoinType,
+    treasuryCapId,
+    metadataObjectId,
+    supplyLimit,
   );
 
   // Factory object can be owned, wrapped or shared public depends on your use case
-  const factoryType = Factory.r(
-    phantom(config.yourStableCoinType),
-  ).fullTypeName;
+  const factoryType = Factory.r(phantom(yourStableCoinType)).fullTypeName;
   tx.moveCall({
     target: "0x2::transfer::public_share_object",
     typeArguments: [factoryType],
@@ -348,11 +340,10 @@ async function getYourStableFactory() {
   );
 
   const yourStableTotalSupply =
-    Number(await factory.getYourStableTotalSupply()) / 10 ** 9;
+    Number(factory.getYourStableTotalSupply()) / 10 ** 9;
   const yourStableBasicSupply =
-    Number(await factory.getYourStableBasicSupply()) / 10 ** 9;
-  const yourStableExtensionSupplies =
-    await factory.getYourStableExtensionSupplies();
+    Number(factory.getYourStableBasicSupply()) / 10 ** 9;
+  const yourStableExtensionSupplies = factory.getYourStableExtensionSupplies();
   const underlyingSTSBUCKBalance = Number(
     factory.getUnderlyingSTSBUCKBalance(),
   );
@@ -385,4 +376,4 @@ async function getYourStableFactory() {
   });
 }
 
-getYourStableFactory().catch(console.error);
+getYourStableFactory().catch(logger.error);

@@ -27,4 +27,5 @@ async function main() {
   logger.info(`Using Signer: ${senderAddress}`);
 }
 
+// eslint-disable-next-line no-console
 main().catch(console.error);

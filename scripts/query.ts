@@ -36,6 +36,9 @@ async function main() {
   logger.info("Interacting with Factory:");
   logger.info({ factory });
 
+  // add referch function to sync the latest state
+  await factory.updateFactory();
+
   logger.info(await factory.getRewardsBuckAmount());
   logger.info(await factory.getRewardsSTSBuckAmount());
   logger.info(factory.getYourStableBasicSupply());

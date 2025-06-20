@@ -136,7 +136,7 @@ export async function burnYourStable() {
     BigInt(burnedAmount),
   );
   // stableCoin Amount to redeem
-  const buckCoin = factory.burnYourStableMoveCall(tx, yourStableCoin, "USDC");
+  const buckCoin = factory.burnAndGetBuckYourStableMoveCall(tx, yourStableCoin);
 
   tx.transferObjects([buckCoin], signer.toSuiAddress());
 
@@ -187,9 +187,9 @@ export async function burnAndRedeemYourStable(
   const buckCoin = factory.burnAndRedeemYourStableMoveCall(
     tx,
     yourStableCoin,
-    "USDC",
     signer.toSuiAddress(),
     redeemedAmount,
+    "USDC", // optional
   );
 
   tx.transferObjects([buckCoin], signer.toSuiAddress());
@@ -244,7 +244,7 @@ export async function batchRedeem() {
   const signer = loadSigner();
 
   const tx = new Transaction();
-  YourStableClient.batchRedeem(tx, "USDC", null, BigInt(100));
+  YourStableClient.batchRedeemMoveCall(tx, "USDC", null, BigInt(100));
 
   const dryRunResponse = await dryRun(suiClient, tx, signer.toSuiAddress());
 

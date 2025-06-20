@@ -20,7 +20,7 @@ import {
 import { getLatestPackageId } from "./utils/package";
 import { setPublishedAt } from "./_generated/your-stable";
 import {
-  burn,
+  burnAndGetBuck,
   burnAndRedeem,
   claimReward,
   fromUnderlyingAmount,
@@ -91,6 +91,16 @@ export class YourStableClient {
     await YourStableClient.updateToLatestPackage(client);
 
     return new YourStableClient(client, factory, factoryCapId);
+  }
+
+  async updateFactory() {
+    const factory = await Factory.fetch(
+      this.client,
+      phantom(this.factory.$typeArgs[0]),
+      this.factory.id,
+    );
+
+    this.factory = factory;
   }
 
   static async updateToLatestPackage(suiClient: SuiClient) {
@@ -219,27 +229,35 @@ export class YourStableClient {
       if (devInspectResponse.effects.status.status === "success") {
         const returnValues = devInspectResponse?.results?.[0]?.returnValues;
         if (!returnValues || returnValues?.[0]?.[0][0] === 0) {
-          return [];
+          return { tickets: [], cursor: null };
         } else {
           // RedemptionTicketInfos
-          const redemptionTicketInfos = returnValues[0];
-          if (!redemptionTicketInfos) return [];
+          const redemptionTicketInfos = returnValues?.[0];
+          if (!redemptionTicketInfos) return { tickets: [], cursor: null };
           // cursor
-          const cursor = returnValues[1];
-          if (!cursor) return [];
+          const cursorData = returnValues?.[1];
+          if (!cursorData) return { tickets: [], cursor: null };
 
-          const value = redemptionTicketInfos[0];
-          return bcs
+          const tickets = bcs
             .vector(RedemptionTicketInfo.bcs)
-            .parse(Uint8Array.from(value as Iterable<number>));
+            .parse(Uint8Array.from(redemptionTicketInfos[0]));
+
+          const cursor = bcs
+            .option(bcs.U64)
+            .parse(Uint8Array.from(cursorData[0]));
+
+          return {
+            tickets,
+            cursor,
+          };
         }
       } else {
-        return [];
+        return { tickets: [], cursor: null };
       }
     } catch (error) {
       console.error(error);
 
-      return [];
+      return { tickets: [], cursor: null };
     }
   }
 
@@ -298,26 +316,21 @@ export class YourStableClient {
     return yourStableCoin;
   }
 
-  burnYourStableMoveCall(
+  burnAndGetBuckYourStableMoveCall(
     tx: Transaction,
     yourStableCoin: TransactionObjectInput,
-    redeemedStableCoin: SUPPORTED_REDEMPTION_COIN,
   ) {
-    const buckCoin = burn(
-      tx,
-      [COIN_TYPE_LIST[redeemedStableCoin], this.factory.$typeArgs[0]],
-      {
-        factory: tx.object(this.factory.id),
-        config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
-        bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
-        vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
-        flask: tx.sharedObjectRef(FLASK_SHARED_OBJECT_REF),
-        fountain: tx.sharedObjectRef(FOUNTAIN_SHARED_OBJECT_REF),
-        strategy: tx.sharedObjectRef(SAVING_VAULT_STRATEGY_SHARED_OBJECT_REF),
-        clock: tx.object.clock(),
-        yourStableCoin,
-      },
-    );
+    const buckCoin = burnAndGetBuck(tx, this.factory.$typeArgs[0], {
+      factory: tx.object(this.factory.id),
+      config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
+      bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
+      vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
+      flask: tx.sharedObjectRef(FLASK_SHARED_OBJECT_REF),
+      fountain: tx.sharedObjectRef(FOUNTAIN_SHARED_OBJECT_REF),
+      strategy: tx.sharedObjectRef(SAVING_VAULT_STRATEGY_SHARED_OBJECT_REF),
+      clock: tx.object.clock(),
+      yourStableCoin,
+    });
 
     return buckCoin;
   }
@@ -325,9 +338,9 @@ export class YourStableClient {
   burnAndRedeemYourStableMoveCall(
     tx: Transaction,
     yourStableCoin: TransactionObjectInput,
-    redeemedStableCoin: SUPPORTED_REDEMPTION_COIN,
     recipient: string,
     redeemedAmount: bigint,
+    redeemedStableCoin: SUPPORTED_REDEMPTION_COIN = "USDC",
   ) {
     const buckCoin = burnAndRedeem(
       tx,
@@ -351,11 +364,11 @@ export class YourStableClient {
     return buckCoin;
   }
 
-  static batchRedeem(
+  static batchRedeemMoveCall(
     tx: Transaction,
-    redeemedStableCoin: SUPPORTED_REDEMPTION_COIN,
-    batchStart: null | bigint,
-    batchSize: bigint,
+    redeemedStableCoin: SUPPORTED_REDEMPTION_COIN = "USDC",
+    batchStart: null | bigint = null,
+    batchSize: bigint = BigInt(500),
   ) {
     batchRedeem(
       tx,

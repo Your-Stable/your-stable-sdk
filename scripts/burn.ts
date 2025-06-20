@@ -23,12 +23,8 @@ export function loadSigner() {
   return Ed25519Keypair.fromSecretKey(secretKey);
 }
 
-async function main() {
+async function main(isRedeemUSDC: boolean) {
   const signer = loadSigner();
-
-  logger.info({signerAddress: signer.toSuiAddress()})
-
-  const senderAddress = signer.toSuiAddress();
 
   const yourStableCoinType =
     "0x85b4ecaa1d0e8f5289044b8a0721d94d802af20350c71cc4e903f26958e7c82d::up_usd::UP_USD";
@@ -45,33 +41,34 @@ async function main() {
   logger.info({ factory });
 
   const tx = new Transaction();
-  // example: 999 USDC
-  const depositedAmount = 0.1 * 10 ** 6;
-  const usdcCoin = await getInputCoins(
+  // example: 0.01 YourStable
+  const burnedAmount = 0.05 * 10 ** YourStableClient.underlyingDecimal;
+  const yourStableCoin = await getInputCoins(
     tx,
     suiClient,
     signer.toSuiAddress(),
-    COIN_TYPE_LIST.USDC,
-    BigInt(depositedAmount),
+    yourStableCoinType,
+    BigInt(burnedAmount),
   );
-  const yourStableCoin = factory.mintYourStableMoveCall(
-    tx,
-    COIN_TYPE_LIST.USDC,
-    usdcCoin,
-  );
-
-  // tx.transferObjects([yourStableCoin], signer.toSuiAddress());
-  tx.transferObjects(
-    [yourStableCoin],
-    // "0xb236b147e10c589027108e8d0686584230673d7663c8741095f4c6c422502ddf",
-    signer.toSuiAddress(),
-  );
+  // stableCoin Amount to redeem
+  let buckCoin;
+  if (isRedeemUSDC) {
+    buckCoin = factory.burnAndRedeemYourStableMoveCall(
+      tx,
+      yourStableCoin,
+      signer.toSuiAddress(),
+      BigInt(burnedAmount),
+      "USDC",
+    );
+  } else {
+    buckCoin = factory.burnAndGetBuckYourStableMoveCall(tx, yourStableCoin);
+  }
+  tx.transferObjects([buckCoin], signer.toSuiAddress());
 
   const dryRunResponse = await dryRun(suiClient, tx, signer.toSuiAddress());
-  logger.info({ dryRunResponse });
 
   if (dryRunResponse.dryrunRes.effects.status.status === "success") {
-    // execute transaction if it's proper
+    //execute transaction if it's proper
     const response = await suiClient.signAndExecuteTransaction({
       transaction: tx,
       signer,
@@ -81,8 +78,6 @@ async function main() {
   } else {
     logger.error(dryRunResponse.dryrunRes.effects.status.error);
   }
-
-  logger.info(`Using Signer: ${senderAddress}`);
 }
 
-main().catch(logger.error);
+main(false).catch(logger.error);

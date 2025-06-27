@@ -14,7 +14,7 @@ import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
 export function isNewFactory(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::event::NewFactory` + '<'); }
 
-export interface NewFactoryFields<YourStable extends PhantomTypeArgument> { factoryId: ToField<ID>; factoryCap: ToField<ID>; coinType: ToField<TypeName>; limit: ToField<"u64"> }
+export interface NewFactoryFields<YourStable extends PhantomTypeArgument> { factoryId: ToField<ID>; factoryCap: ToField<ID>; coinType: ToField<TypeName>; decimals: ToField<"u8">; limit: ToField<"u64"> }
 
 export type NewFactoryReified<YourStable extends PhantomTypeArgument> = Reified< NewFactory<YourStable>, NewFactoryFields<YourStable> >;
 
@@ -24,11 +24,11 @@ export class NewFactory<YourStable extends PhantomTypeArgument> implements Struc
 
  readonly $typeName = NewFactory.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::event::NewFactory<${PhantomToTypeStr<YourStable>}>`; readonly $typeArgs: [PhantomToTypeStr<YourStable>]; readonly $isPhantom = NewFactory.$isPhantom;
 
- readonly factoryId: ToField<ID>; readonly factoryCap: ToField<ID>; readonly coinType: ToField<TypeName>; readonly limit: ToField<"u64">
+ readonly factoryId: ToField<ID>; readonly factoryCap: ToField<ID>; readonly coinType: ToField<TypeName>; readonly decimals: ToField<"u8">; readonly limit: ToField<"u64">
 
  private constructor(typeArgs: [PhantomToTypeStr<YourStable>], fields: NewFactoryFields<YourStable>, ) { this.$fullTypeName = composeSuiType( NewFactory.$typeName, ...typeArgs ) as `${typeof PKG_V1}::event::NewFactory<${PhantomToTypeStr<YourStable>}>`; this.$typeArgs = typeArgs;
 
- this.factoryId = fields.factoryId;; this.factoryCap = fields.factoryCap;; this.coinType = fields.coinType;; this.limit = fields.limit; }
+ this.factoryId = fields.factoryId;; this.factoryCap = fields.factoryCap;; this.coinType = fields.coinType;; this.decimals = fields.decimals;; this.limit = fields.limit; }
 
  static reified<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): NewFactoryReified<ToPhantomTypeArgument<YourStable>> { return { typeName: NewFactory.$typeName, fullTypeName: composeSuiType( NewFactory.$typeName, ...[extractType(YourStable)] ) as `${typeof PKG_V1}::event::NewFactory<${PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>}>`, typeArgs: [ extractType(YourStable) ] as [PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>], isPhantom: NewFactory.$isPhantom, reifiedTypeArgs: [YourStable], fromFields: (fields: Record<string, any>) => NewFactory.fromFields( YourStable, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => NewFactory.fromFieldsWithTypes( YourStable, item, ), fromBcs: (data: Uint8Array) => NewFactory.fromBcs( YourStable, data, ), bcs: NewFactory.bcs, fromJSONField: (field: any) => NewFactory.fromJSONField( YourStable, field, ), fromJSON: (json: Record<string, any>) => NewFactory.fromJSON( YourStable, json, ), fromSuiParsedData: (content: SuiParsedData) => NewFactory.fromSuiParsedData( YourStable, content, ), fromSuiObjectData: (content: SuiObjectData) => NewFactory.fromSuiObjectData( YourStable, content, ), fetch: async (client: SuiClient, id: string) => NewFactory.fetch( client, YourStable, id, ), new: ( fields: NewFactoryFields<ToPhantomTypeArgument<YourStable>>, ) => { return new NewFactory( [extractType(YourStable)], fields ) }, kind: "StructClassReified", } }
 
@@ -38,29 +38,29 @@ export class NewFactory<YourStable extends PhantomTypeArgument> implements Struc
 
  static get bcs() { return bcs.struct("NewFactory", {
 
- factory_id: ID.bcs, factory_cap: ID.bcs, coin_type: TypeName.bcs, limit: bcs.u64()
+ factory_id: ID.bcs, factory_cap: ID.bcs, coin_type: TypeName.bcs, decimals: bcs.u8(), limit: bcs.u64()
 
 }) };
 
- static fromFields<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, fields: Record<string, any> ): NewFactory<ToPhantomTypeArgument<YourStable>> { return NewFactory.reified( typeArg, ).new( { factoryId: decodeFromFields(ID.reified(), fields.factory_id), factoryCap: decodeFromFields(ID.reified(), fields.factory_cap), coinType: decodeFromFields(TypeName.reified(), fields.coin_type), limit: decodeFromFields("u64", fields.limit) } ) }
+ static fromFields<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, fields: Record<string, any> ): NewFactory<ToPhantomTypeArgument<YourStable>> { return NewFactory.reified( typeArg, ).new( { factoryId: decodeFromFields(ID.reified(), fields.factory_id), factoryCap: decodeFromFields(ID.reified(), fields.factory_cap), coinType: decodeFromFields(TypeName.reified(), fields.coin_type), decimals: decodeFromFields("u8", fields.decimals), limit: decodeFromFields("u64", fields.limit) } ) }
 
  static fromFieldsWithTypes<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, item: FieldsWithTypes ): NewFactory<ToPhantomTypeArgument<YourStable>> { if (!isNewFactory(item.type)) { throw new Error("not a NewFactory type");
 
  } assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
- return NewFactory.reified( typeArg, ).new( { factoryId: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory_id), factoryCap: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory_cap), coinType: decodeFromFieldsWithTypes(TypeName.reified(), item.fields.coin_type), limit: decodeFromFieldsWithTypes("u64", item.fields.limit) } ) }
+ return NewFactory.reified( typeArg, ).new( { factoryId: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory_id), factoryCap: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory_cap), coinType: decodeFromFieldsWithTypes(TypeName.reified(), item.fields.coin_type), decimals: decodeFromFieldsWithTypes("u8", item.fields.decimals), limit: decodeFromFieldsWithTypes("u64", item.fields.limit) } ) }
 
  static fromBcs<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: Uint8Array ): NewFactory<ToPhantomTypeArgument<YourStable>> { return NewFactory.fromFields( typeArg, NewFactory.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- factoryId: this.factoryId,factoryCap: this.factoryCap,coinType: this.coinType.toJSONField(),limit: this.limit.toString(),
+ factoryId: this.factoryId,factoryCap: this.factoryCap,coinType: this.coinType.toJSONField(),decimals: this.decimals,limit: this.limit.toString(),
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, field: any ): NewFactory<ToPhantomTypeArgument<YourStable>> { return NewFactory.reified( typeArg, ).new( { factoryId: decodeFromJSONField(ID.reified(), field.factoryId), factoryCap: decodeFromJSONField(ID.reified(), field.factoryCap), coinType: decodeFromJSONField(TypeName.reified(), field.coinType), limit: decodeFromJSONField("u64", field.limit) } ) }
+ static fromJSONField<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, field: any ): NewFactory<ToPhantomTypeArgument<YourStable>> { return NewFactory.reified( typeArg, ).new( { factoryId: decodeFromJSONField(ID.reified(), field.factoryId), factoryCap: decodeFromJSONField(ID.reified(), field.factoryCap), coinType: decodeFromJSONField(TypeName.reified(), field.coinType), decimals: decodeFromJSONField("u8", field.decimals), limit: decodeFromJSONField("u64", field.limit) } ) }
 
  static fromJSON<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, json: Record<string, any> ): NewFactory<ToPhantomTypeArgument<YourStable>> { if (json.$typeName !== NewFactory.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(NewFactory.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
 
@@ -364,7 +364,7 @@ export class BurnYourStableWithExtension<YourStable extends PhantomTypeArgument>
 
 export function isClaimReward(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V1}::event::ClaimReward` + '<'); }
 
-export interface ClaimRewardFields<YourStable extends PhantomTypeArgument> { factory: ToField<ID>; stSbuckReward: ToField<"u64"> }
+export interface ClaimRewardFields<YourStable extends PhantomTypeArgument> { factory: ToField<ID>; stSbuckReward: ToField<"u64">; sender: ToField<"address"> }
 
 export type ClaimRewardReified<YourStable extends PhantomTypeArgument> = Reified< ClaimReward<YourStable>, ClaimRewardFields<YourStable> >;
 
@@ -374,11 +374,11 @@ export class ClaimReward<YourStable extends PhantomTypeArgument> implements Stru
 
  readonly $typeName = ClaimReward.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::event::ClaimReward<${PhantomToTypeStr<YourStable>}>`; readonly $typeArgs: [PhantomToTypeStr<YourStable>]; readonly $isPhantom = ClaimReward.$isPhantom;
 
- readonly factory: ToField<ID>; readonly stSbuckReward: ToField<"u64">
+ readonly factory: ToField<ID>; readonly stSbuckReward: ToField<"u64">; readonly sender: ToField<"address">
 
  private constructor(typeArgs: [PhantomToTypeStr<YourStable>], fields: ClaimRewardFields<YourStable>, ) { this.$fullTypeName = composeSuiType( ClaimReward.$typeName, ...typeArgs ) as `${typeof PKG_V1}::event::ClaimReward<${PhantomToTypeStr<YourStable>}>`; this.$typeArgs = typeArgs;
 
- this.factory = fields.factory;; this.stSbuckReward = fields.stSbuckReward; }
+ this.factory = fields.factory;; this.stSbuckReward = fields.stSbuckReward;; this.sender = fields.sender; }
 
  static reified<YourStable extends PhantomReified<PhantomTypeArgument>>( YourStable: YourStable ): ClaimRewardReified<ToPhantomTypeArgument<YourStable>> { return { typeName: ClaimReward.$typeName, fullTypeName: composeSuiType( ClaimReward.$typeName, ...[extractType(YourStable)] ) as `${typeof PKG_V1}::event::ClaimReward<${PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>}>`, typeArgs: [ extractType(YourStable) ] as [PhantomToTypeStr<ToPhantomTypeArgument<YourStable>>], isPhantom: ClaimReward.$isPhantom, reifiedTypeArgs: [YourStable], fromFields: (fields: Record<string, any>) => ClaimReward.fromFields( YourStable, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => ClaimReward.fromFieldsWithTypes( YourStable, item, ), fromBcs: (data: Uint8Array) => ClaimReward.fromBcs( YourStable, data, ), bcs: ClaimReward.bcs, fromJSONField: (field: any) => ClaimReward.fromJSONField( YourStable, field, ), fromJSON: (json: Record<string, any>) => ClaimReward.fromJSON( YourStable, json, ), fromSuiParsedData: (content: SuiParsedData) => ClaimReward.fromSuiParsedData( YourStable, content, ), fromSuiObjectData: (content: SuiObjectData) => ClaimReward.fromSuiObjectData( YourStable, content, ), fetch: async (client: SuiClient, id: string) => ClaimReward.fetch( client, YourStable, id, ), new: ( fields: ClaimRewardFields<ToPhantomTypeArgument<YourStable>>, ) => { return new ClaimReward( [extractType(YourStable)], fields ) }, kind: "StructClassReified", } }
 
@@ -388,29 +388,29 @@ export class ClaimReward<YourStable extends PhantomTypeArgument> implements Stru
 
  static get bcs() { return bcs.struct("ClaimReward", {
 
- factory: ID.bcs, st_sbuck_reward: bcs.u64()
+ factory: ID.bcs, st_sbuck_reward: bcs.u64(), sender: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
 
 }) };
 
- static fromFields<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, fields: Record<string, any> ): ClaimReward<ToPhantomTypeArgument<YourStable>> { return ClaimReward.reified( typeArg, ).new( { factory: decodeFromFields(ID.reified(), fields.factory), stSbuckReward: decodeFromFields("u64", fields.st_sbuck_reward) } ) }
+ static fromFields<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, fields: Record<string, any> ): ClaimReward<ToPhantomTypeArgument<YourStable>> { return ClaimReward.reified( typeArg, ).new( { factory: decodeFromFields(ID.reified(), fields.factory), stSbuckReward: decodeFromFields("u64", fields.st_sbuck_reward), sender: decodeFromFields("address", fields.sender) } ) }
 
  static fromFieldsWithTypes<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, item: FieldsWithTypes ): ClaimReward<ToPhantomTypeArgument<YourStable>> { if (!isClaimReward(item.type)) { throw new Error("not a ClaimReward type");
 
  } assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
- return ClaimReward.reified( typeArg, ).new( { factory: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory), stSbuckReward: decodeFromFieldsWithTypes("u64", item.fields.st_sbuck_reward) } ) }
+ return ClaimReward.reified( typeArg, ).new( { factory: decodeFromFieldsWithTypes(ID.reified(), item.fields.factory), stSbuckReward: decodeFromFieldsWithTypes("u64", item.fields.st_sbuck_reward), sender: decodeFromFieldsWithTypes("address", item.fields.sender) } ) }
 
  static fromBcs<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, data: Uint8Array ): ClaimReward<ToPhantomTypeArgument<YourStable>> { return ClaimReward.fromFields( typeArg, ClaimReward.bcs.parse(data) ) }
 
  toJSONField() { return {
 
- factory: this.factory,stSbuckReward: this.stSbuckReward.toString(),
+ factory: this.factory,stSbuckReward: this.stSbuckReward.toString(),sender: this.sender,
 
 } }
 
  toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
- static fromJSONField<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, field: any ): ClaimReward<ToPhantomTypeArgument<YourStable>> { return ClaimReward.reified( typeArg, ).new( { factory: decodeFromJSONField(ID.reified(), field.factory), stSbuckReward: decodeFromJSONField("u64", field.stSbuckReward) } ) }
+ static fromJSONField<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, field: any ): ClaimReward<ToPhantomTypeArgument<YourStable>> { return ClaimReward.reified( typeArg, ).new( { factory: decodeFromJSONField(ID.reified(), field.factory), stSbuckReward: decodeFromJSONField("u64", field.stSbuckReward), sender: decodeFromJSONField("address", field.sender) } ) }
 
  static fromJSON<YourStable extends PhantomReified<PhantomTypeArgument>>( typeArg: YourStable, json: Record<string, any> ): ClaimReward<ToPhantomTypeArgument<YourStable>> { if (json.$typeName !== ClaimReward.$typeName) { throw new Error("not a WithTwoGenerics json object") }; assertReifiedTypeArgsMatch( composeSuiType(ClaimReward.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg], )
 

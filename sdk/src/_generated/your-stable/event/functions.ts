@@ -6,9 +6,9 @@ import {ID} from "../../_dependencies/source/0x2/object/structs";
 import {obj, pure} from "../../_framework/util";
 import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export interface EmitNewFactoryEventArgs { factoryId: string | TransactionArgument; factoryCap: string | TransactionArgument; coinType: TransactionObjectInput; limit: bigint | TransactionArgument }
+export interface EmitNewFactoryEventArgs { factoryId: string | TransactionArgument; factoryCap: string | TransactionArgument; coinType: TransactionObjectInput; decimals: number | TransactionArgument; limit: bigint | TransactionArgument }
 
-export function emitNewFactoryEvent( tx: Transaction, typeArg: string, args: EmitNewFactoryEventArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::event::emit_new_factory_event`, typeArguments: [typeArg], arguments: [ pure(tx, args.factoryId, `${ID.$typeName}`), pure(tx, args.factoryCap, `${ID.$typeName}`), obj(tx, args.coinType), pure(tx, args.limit, `u64`) ], }) }
+export function emitNewFactoryEvent( tx: Transaction, typeArg: string, args: EmitNewFactoryEventArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::event::emit_new_factory_event`, typeArguments: [typeArg], arguments: [ pure(tx, args.factoryId, `${ID.$typeName}`), pure(tx, args.factoryCap, `${ID.$typeName}`), obj(tx, args.coinType), pure(tx, args.decimals, `u8`), pure(tx, args.limit, `u64`) ], }) }
 
 export interface EmitMintYourStableEventArgs { factoryId: string | TransactionArgument; stableCoinType: TransactionObjectInput; mintedAmount: bigint | TransactionArgument; chargedBuck: bigint | TransactionArgument; mintedStSbuckAmount: bigint | TransactionArgument; factorySupply: bigint | TransactionArgument; factoryUnderlyingBalance: bigint | TransactionArgument }
 
@@ -26,9 +26,9 @@ export interface EmitBurnYourStableWithExtensionEventArgs { factoryId: string | 
 
 export function emitBurnYourStableWithExtensionEvent( tx: Transaction, typeArg: string, args: EmitBurnYourStableWithExtensionEventArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::event::emit_burn_your_stable_with_extension_event`, typeArguments: [typeArg], arguments: [ pure(tx, args.factoryId, `${ID.$typeName}`), obj(tx, args.extensionType), pure(tx, args.yourStableAmount, `u64`), pure(tx, args.extensionSupply, `u64`) ], }) }
 
-export interface EmitClaimRewardEventArgs { factory: string | TransactionArgument; stSbuckReward: bigint | TransactionArgument }
+export interface EmitClaimRewardEventArgs { factory: string | TransactionArgument; stSbuckReward: bigint | TransactionArgument; sender: string | TransactionArgument }
 
-export function emitClaimRewardEvent( tx: Transaction, typeArg: string, args: EmitClaimRewardEventArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::event::emit_claim_reward_event`, typeArguments: [typeArg], arguments: [ pure(tx, args.factory, `${ID.$typeName}`), pure(tx, args.stSbuckReward, `u64`) ], }) }
+export function emitClaimRewardEvent( tx: Transaction, typeArg: string, args: EmitClaimRewardEventArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::event::emit_claim_reward_event`, typeArguments: [typeArg], arguments: [ pure(tx, args.factory, `${ID.$typeName}`), pure(tx, args.stSbuckReward, `u64`), pure(tx, args.sender, `address`) ], }) }
 
 export interface SetBasicLimitArgs { factory: string | TransactionArgument; limit: bigint | TransactionArgument }
 

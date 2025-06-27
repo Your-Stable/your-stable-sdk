@@ -375,7 +375,7 @@ export class YourStableClient {
     yourStableCoin: TransactionObjectInput,
     redeemedStableCoin: SUPPORTED_REDEMPTION_COIN = "USDC",
   ) {
-    const buckCoin = redeem(
+    const usdCoin = redeem(
       tx,
       [COIN_TYPE_LIST[redeemedStableCoin], this.factory.$typeArgs[0]],
       {
@@ -391,7 +391,7 @@ export class YourStableClient {
       },
     );
 
-    return buckCoin;
+    return usdCoin;
   }
 
   static batchRedeemMoveCall(

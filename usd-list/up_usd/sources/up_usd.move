@@ -7,10 +7,10 @@ public struct UP_USD has drop {}
 fun init(otw: UP_USD, ctx: &mut TxContext) {
     let (cap, metadata) = coin::create_currency(
         otw,
-        9,
+        6,
         b"upUSD",
         b"DoubleUp USD",
-        b"Stable-value Chip in DoubleUp (www.doubleup.fun)",
+        b"Play games with upUSD in www.doubleup.fun",
         option::some(sui::url::new_unsafe_from_bytes(b"https://www.doubleup.fun/Diamond_Only.png")),
         ctx,
     );

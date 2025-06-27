@@ -27,6 +27,7 @@ import {
   getRewardsValue,
   mint,
   new_,
+  redeem,
   setBasicLimit,
   setExtensionLimit,
   toUnderlyingAmount,
@@ -93,7 +94,7 @@ export class YourStableClient {
     return new YourStableClient(client, factory, factoryCapId);
   }
 
-  async updateFactory() {
+  async refetchFactory() {
     const factory = await Factory.fetch(
       this.client,
       phantom(this.factory.$typeArgs[0]),
@@ -113,6 +114,11 @@ export class YourStableClient {
   }
 
   // --- Getter ---
+
+  getYourstableDecimal() {
+    return this.factory.decimals;
+  }
+
   getUnderlyingSTSBUCKBalance() {
     return this.factory.underlyingBalance.value;
   }
@@ -357,6 +363,30 @@ export class YourStableClient {
         clock: tx.object.clock(),
         redeemedAmount: tx.pure.u64(redeemedAmount),
         recipient: tx.pure.address(recipient),
+        yourStableCoin,
+      },
+    );
+
+    return buckCoin;
+  }
+
+  redeemYourStableMoveCall(
+    tx: Transaction,
+    yourStableCoin: TransactionObjectInput,
+    redeemedStableCoin: SUPPORTED_REDEMPTION_COIN = "USDC",
+  ) {
+    const buckCoin = redeem(
+      tx,
+      [COIN_TYPE_LIST[redeemedStableCoin], this.factory.$typeArgs[0]],
+      {
+        factory: tx.object(this.factory.id),
+        config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
+        bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
+        vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
+        flask: tx.sharedObjectRef(FLASK_SHARED_OBJECT_REF),
+        fountain: tx.sharedObjectRef(FOUNTAIN_SHARED_OBJECT_REF),
+        strategy: tx.sharedObjectRef(SAVING_VAULT_STRATEGY_SHARED_OBJECT_REF),
+        clock: tx.object.clock(),
         yourStableCoin,
       },
     );

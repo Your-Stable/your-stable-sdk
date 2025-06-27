@@ -14,7 +14,7 @@ export const CONFIG_SHARED_OBJECT_REF = {
   objectId:
     "0xf8760ecc764b4b0338aee267d60c9893686919ccc30eb2ad3cd6ac5bb95c1092",
   initialSharedVersion: 581691469,
-  mutable: false,
+  mutable: true,
 };
 
 export type SUPPORTED_REDEMPTION_COIN = "USDC";

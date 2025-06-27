@@ -1,19 +1,19 @@
 import { normalizeSuiAddress } from "@mysten/sui/utils";
 
 export const YOUR_STABLE_PACKAGE_UPGRADE_CAP =
-  "0xef4a4dbf7e76eb1fcbb150721ec34f45c9610f729f366ca7a14c84372289f7fb";
+  "0x8002a208aa1a8b62e4a635e2c71e92dc4c5ff08c4d9adef8db1c81a248aaa67f";
 
 export const FACTORY_REGISTRY_SHARED_OBJECT_REF = {
   objectId:
-    "0x5b028d014655ea41f9fbd0af35d3bfd78659a77b651ea52cff4cda7823bbb300",
-  initialSharedVersion: 570210140,
+    "0x72ea56a543bae88a4d8e777fec40f54646a26f1a67a37b70fdd2f5338226b165",
+  initialSharedVersion: 581691469,
   mutable: true,
 };
 
 export const CONFIG_SHARED_OBJECT_REF = {
   objectId:
-    "0x5f35aaedcb0b46c6cd6631b17b7196285191281c8943e53678309c4fbb49c801",
-  initialSharedVersion: 570210140,
+    "0xf8760ecc764b4b0338aee267d60c9893686919ccc30eb2ad3cd6ac5bb95c1092",
+  initialSharedVersion: 581691469,
   mutable: false,
 };
 
@@ -32,8 +32,8 @@ export const REDEMPTION_QUEUE: Record<
 > = {
   USDC: {
     objectId:
-      "0x776bdff8fe47dfddcbde6039abd383d0571fbd4b8ac96f49443c0152fd4001f2",
-    initialSharedVersion: 572923832,
+      "0xc403edad712380423e0b4ed52918e08324b7833ffff281cf8e719c27a87be0da",
+    initialSharedVersion: 581125205,
     mutable: true,
   },
 };

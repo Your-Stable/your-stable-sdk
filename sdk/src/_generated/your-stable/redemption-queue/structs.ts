@@ -6,7 +6,7 @@ import {UID} from "../../_dependencies/source/0x2/object/structs";
 import {BUCK} from "../../_dependencies/source/0xce7ff77a83ea0cb6fd39bd8748e2ec89a3f41e8efdc3f4eb123e0ca37b184db2/buck/structs";
 import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructClass, ToField, ToPhantomTypeArgument, ToTypeStr, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, fieldToJSON, phantom, ToTypeStr as ToPhantom} from "../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../_framework/util";
-import {PKG_V1, PKG_V2} from "../index";
+import {PKG_V1} from "../index";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
@@ -289,7 +289,7 @@ export class RedeemRequest<U extends PhantomTypeArgument, R extends PhantomTypeA
 
 /* ============================== RedemptionTicketInfo =============================== */
 
-export function isRedemptionTicketInfo(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V2}::redemption_queue::RedemptionTicketInfo`; }
+export function isRedemptionTicketInfo(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::redemption_queue::RedemptionTicketInfo`; }
 
 export interface RedemptionTicketInfoFields { ticketId: ToField<"u64">; recipient: ToField<"address">; balance: ToField<"u64">; timeToRedeem: ToField<"u64"> }
 
@@ -297,17 +297,17 @@ export type RedemptionTicketInfoReified = Reified< RedemptionTicketInfo, Redempt
 
 export class RedemptionTicketInfo implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V2}::redemption_queue::RedemptionTicketInfo`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::redemption_queue::RedemptionTicketInfo`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
- readonly $typeName = RedemptionTicketInfo.$typeName; readonly $fullTypeName: `${typeof PKG_V2}::redemption_queue::RedemptionTicketInfo`; readonly $typeArgs: []; readonly $isPhantom = RedemptionTicketInfo.$isPhantom;
+ readonly $typeName = RedemptionTicketInfo.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::redemption_queue::RedemptionTicketInfo`; readonly $typeArgs: []; readonly $isPhantom = RedemptionTicketInfo.$isPhantom;
 
  readonly ticketId: ToField<"u64">; readonly recipient: ToField<"address">; readonly balance: ToField<"u64">; readonly timeToRedeem: ToField<"u64">
 
- private constructor(typeArgs: [], fields: RedemptionTicketInfoFields, ) { this.$fullTypeName = composeSuiType( RedemptionTicketInfo.$typeName, ...typeArgs ) as `${typeof PKG_V2}::redemption_queue::RedemptionTicketInfo`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: RedemptionTicketInfoFields, ) { this.$fullTypeName = composeSuiType( RedemptionTicketInfo.$typeName, ...typeArgs ) as `${typeof PKG_V1}::redemption_queue::RedemptionTicketInfo`; this.$typeArgs = typeArgs;
 
  this.ticketId = fields.ticketId;; this.recipient = fields.recipient;; this.balance = fields.balance;; this.timeToRedeem = fields.timeToRedeem; }
 
- static reified( ): RedemptionTicketInfoReified { return { typeName: RedemptionTicketInfo.$typeName, fullTypeName: composeSuiType( RedemptionTicketInfo.$typeName, ...[] ) as `${typeof PKG_V2}::redemption_queue::RedemptionTicketInfo`, typeArgs: [ ] as [], isPhantom: RedemptionTicketInfo.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => RedemptionTicketInfo.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => RedemptionTicketInfo.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => RedemptionTicketInfo.fromBcs( data, ), bcs: RedemptionTicketInfo.bcs, fromJSONField: (field: any) => RedemptionTicketInfo.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => RedemptionTicketInfo.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => RedemptionTicketInfo.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => RedemptionTicketInfo.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => RedemptionTicketInfo.fetch( client, id, ), new: ( fields: RedemptionTicketInfoFields, ) => { return new RedemptionTicketInfo( [], fields ) }, kind: "StructClassReified", } }
+ static reified( ): RedemptionTicketInfoReified { return { typeName: RedemptionTicketInfo.$typeName, fullTypeName: composeSuiType( RedemptionTicketInfo.$typeName, ...[] ) as `${typeof PKG_V1}::redemption_queue::RedemptionTicketInfo`, typeArgs: [ ] as [], isPhantom: RedemptionTicketInfo.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => RedemptionTicketInfo.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => RedemptionTicketInfo.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => RedemptionTicketInfo.fromBcs( data, ), bcs: RedemptionTicketInfo.bcs, fromJSONField: (field: any) => RedemptionTicketInfo.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => RedemptionTicketInfo.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => RedemptionTicketInfo.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => RedemptionTicketInfo.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => RedemptionTicketInfo.fetch( client, id, ), new: ( fields: RedemptionTicketInfoFields, ) => { return new RedemptionTicketInfo( [], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return RedemptionTicketInfo.reified() }
 

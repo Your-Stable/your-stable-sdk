@@ -20,7 +20,7 @@ import {
 import { getLatestPackageId } from "./utils/package";
 import { setPublishedAt } from "./_generated/your-stable";
 import {
-  burnAndGetBuck,
+  burn,
   burnAndRedeem,
   claimReward,
   fromUnderlyingAmount,
@@ -177,14 +177,14 @@ export class YourStableClient {
 
   static async getQuotedStSBuckAmountByStableCoinAmount(
     suiClient: SuiClient,
-    stableAmount: bigint,
+    buckAmount: bigint,
   ) {
     const tx = new Transaction();
 
     toUnderlyingAmount(tx, {
       vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
       clock: tx.object.clock(),
-      stableAmount,
+      buckAmount,
     });
 
     const devInspectResponse = await devInspectTransaction(suiClient, tx);
@@ -194,14 +194,14 @@ export class YourStableClient {
 
   static async getQuotedStableCoinAmountByStSBuckAmount(
     suiClient: SuiClient,
-    stSBuckAmount: bigint,
+    stsbuckAmount: bigint,
   ) {
     const tx = new Transaction();
 
     fromUnderlyingAmount(tx, {
       vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
       clock: tx.object.clock(),
-      underlyingAmount: stSBuckAmount,
+      stsbuckAmount,
     });
 
     const devInspectResponse = await devInspectTransaction(suiClient, tx);
@@ -280,7 +280,7 @@ export class YourStableClient {
     return [factory, factoryCap];
   }
 
-  static CreateRedemptionQueueMoveCall(
+  static createRedemptionQueueMoveCall(
     tx: Transaction,
     stableCoinType: string,
     ruleType: string,
@@ -316,11 +316,11 @@ export class YourStableClient {
     return yourStableCoin;
   }
 
-  burnAndGetBuckYourStableMoveCall(
+  burnYourStableMoveCall(
     tx: Transaction,
     yourStableCoin: TransactionObjectInput,
   ) {
-    const buckCoin = burnAndGetBuck(tx, this.factory.$typeArgs[0], {
+    const buckCoin = burn(tx, this.factory.$typeArgs[0], {
       factory: tx.object(this.factory.id),
       config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
       bucketProtocol: tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
@@ -386,7 +386,6 @@ export class YourStableClient {
   // --> admin
   claimRewardMoveCall(tx: Transaction) {
     const stSbuckCoin = claimReward(tx, this.factory.$typeArgs[0], {
-      cap: tx.object(this.factoryCap),
       factory: tx.object(this.factory.id),
       config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
       vault: tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),

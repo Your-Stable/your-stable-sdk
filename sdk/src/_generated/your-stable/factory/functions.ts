@@ -9,16 +9,16 @@ import {
   TransactionObjectInput,
 } from "@mysten/sui/transactions";
 
-export function errMismatchedDecimals(tx: Transaction) {
+export function errInvalidExtensionType(tx: Transaction) {
   return tx.moveCall({
-    target: `${PUBLISHED_AT}::factory::err_mismatched_decimals`,
+    target: `${PUBLISHED_AT}::factory::err_invalid_extension_type`,
     arguments: [],
   });
 }
 
-export function errInvalidExtensionType(tx: Transaction) {
+export function errSenderIsNotBeneficiary(tx: Transaction) {
   return tx.moveCall({
-    target: `${PUBLISHED_AT}::factory::err_invalid_extension_type`,
+    target: `${PUBLISHED_AT}::factory::err_sender_is_not_beneficiary`,
     arguments: [],
   });
 }
@@ -73,7 +73,7 @@ export function mint(
   });
 }
 
-export interface BurnAndGetBuckArgs {
+export interface BurnArgs {
   factory: TransactionObjectInput;
   config: TransactionObjectInput;
   bucketProtocol: TransactionObjectInput;
@@ -85,13 +85,9 @@ export interface BurnAndGetBuckArgs {
   yourStableCoin: TransactionObjectInput;
 }
 
-export function burnAndGetBuck(
-  tx: Transaction,
-  typeArg: string,
-  args: BurnAndGetBuckArgs,
-) {
+export function burn(tx: Transaction, typeArg: string, args: BurnArgs) {
   return tx.moveCall({
-    target: `${PUBLISHED_AT}::factory::burn_and_get_buck`,
+    target: `${PUBLISHED_AT}::factory::burn`,
     typeArguments: [typeArg],
     arguments: [
       obj(tx, args.factory),
@@ -143,6 +139,40 @@ export function burnAndRedeem(
       obj(tx, args.yourStableCoin),
       pure(tx, args.redeemedAmount, `u64`),
       pure(tx, args.recipient, `address`),
+    ],
+  });
+}
+
+export interface RedeemArgs {
+  factory: TransactionObjectInput;
+  config: TransactionObjectInput;
+  bucketProtocol: TransactionObjectInput;
+  vault: TransactionObjectInput;
+  flask: TransactionObjectInput;
+  fountain: TransactionObjectInput;
+  strategy: TransactionObjectInput;
+  clock: TransactionObjectInput;
+  yourStableCoin: TransactionObjectInput;
+}
+
+export function redeem(
+  tx: Transaction,
+  typeArgs: [string, string],
+  args: RedeemArgs,
+) {
+  return tx.moveCall({
+    target: `${PUBLISHED_AT}::factory::redeem`,
+    typeArguments: typeArgs,
+    arguments: [
+      obj(tx, args.factory),
+      obj(tx, args.config),
+      obj(tx, args.bucketProtocol),
+      obj(tx, args.vault),
+      obj(tx, args.flask),
+      obj(tx, args.fountain),
+      obj(tx, args.strategy),
+      obj(tx, args.clock),
+      obj(tx, args.yourStableCoin),
     ],
   });
 }
@@ -244,7 +274,6 @@ export function setExtensionLimit(
 }
 
 export interface ClaimRewardArgs {
-  cap: TransactionObjectInput;
   factory: TransactionObjectInput;
   config: TransactionObjectInput;
   vault: TransactionObjectInput;
@@ -260,7 +289,6 @@ export function claimReward(
     target: `${PUBLISHED_AT}::factory::claim_reward`,
     typeArguments: [typeArg],
     arguments: [
-      obj(tx, args.cap),
       obj(tx, args.factory),
       obj(tx, args.config),
       obj(tx, args.vault),
@@ -297,6 +325,54 @@ export function updateMetadata(
       pure(tx, args.symbol, `${Option.$typeName}<${String1.$typeName}>`),
       pure(tx, args.description, `${Option.$typeName}<${String.$typeName}>`),
       pure(tx, args.iconUrl, `${Option.$typeName}<${String1.$typeName}>`),
+    ],
+  });
+}
+
+export interface AddBeneficiaryArgs {
+  cap: TransactionObjectInput;
+  factory: TransactionObjectInput;
+  config: TransactionObjectInput;
+  account: string | TransactionArgument;
+}
+
+export function addBeneficiary(
+  tx: Transaction,
+  typeArg: string,
+  args: AddBeneficiaryArgs,
+) {
+  return tx.moveCall({
+    target: `${PUBLISHED_AT}::factory::add_beneficiary`,
+    typeArguments: [typeArg],
+    arguments: [
+      obj(tx, args.cap),
+      obj(tx, args.factory),
+      obj(tx, args.config),
+      pure(tx, args.account, `address`),
+    ],
+  });
+}
+
+export interface RemoveBeneficiaryArgs {
+  cap: TransactionObjectInput;
+  factory: TransactionObjectInput;
+  config: TransactionObjectInput;
+  account: string | TransactionArgument;
+}
+
+export function removeBeneficiary(
+  tx: Transaction,
+  typeArg: string,
+  args: RemoveBeneficiaryArgs,
+) {
+  return tx.moveCall({
+    target: `${PUBLISHED_AT}::factory::remove_beneficiary`,
+    typeArguments: [typeArg],
+    arguments: [
+      obj(tx, args.cap),
+      obj(tx, args.factory),
+      obj(tx, args.config),
+      pure(tx, args.account, `address`),
     ],
   });
 }
@@ -378,10 +454,22 @@ export function underlyingDecimals(tx: Transaction) {
   });
 }
 
+export function yourStableDecimals(
+  tx: Transaction,
+  typeArg: string,
+  factory: TransactionObjectInput,
+) {
+  return tx.moveCall({
+    target: `${PUBLISHED_AT}::factory::your_stable_decimals`,
+    typeArguments: [typeArg],
+    arguments: [obj(tx, factory)],
+  });
+}
+
 export interface ToUnderlyingAmountArgs {
   vault: TransactionObjectInput;
   clock: TransactionObjectInput;
-  stableAmount: bigint | TransactionArgument;
+  buckAmount: bigint | TransactionArgument;
 }
 
 export function toUnderlyingAmount(
@@ -393,7 +481,7 @@ export function toUnderlyingAmount(
     arguments: [
       obj(tx, args.vault),
       obj(tx, args.clock),
-      pure(tx, args.stableAmount, `u64`),
+      pure(tx, args.buckAmount, `u64`),
     ],
   });
 }
@@ -401,7 +489,7 @@ export function toUnderlyingAmount(
 export interface FromUnderlyingAmountArgs {
   vault: TransactionObjectInput;
   clock: TransactionObjectInput;
-  underlyingAmount: bigint | TransactionArgument;
+  stsbuckAmount: bigint | TransactionArgument;
 }
 
 export function fromUnderlyingAmount(
@@ -413,7 +501,7 @@ export function fromUnderlyingAmount(
     arguments: [
       obj(tx, args.vault),
       obj(tx, args.clock),
-      pure(tx, args.underlyingAmount, `u64`),
+      pure(tx, args.stsbuckAmount, `u64`),
     ],
   });
 }
@@ -462,6 +550,40 @@ export function getRewardsValue(
   });
 }
 
+export interface ToNormalizedAmountArgs {
+  factory: TransactionObjectInput;
+  amount: bigint | TransactionArgument;
+}
+
+export function toNormalizedAmount(
+  tx: Transaction,
+  typeArg: string,
+  args: ToNormalizedAmountArgs,
+) {
+  return tx.moveCall({
+    target: `${PUBLISHED_AT}::factory::to_normalized_amount`,
+    typeArguments: [typeArg],
+    arguments: [obj(tx, args.factory), pure(tx, args.amount, `u64`)],
+  });
+}
+
+export interface FromNormalizedAmountArgs {
+  factory: TransactionObjectInput;
+  amount: bigint | TransactionArgument;
+}
+
+export function fromNormalizedAmount(
+  tx: Transaction,
+  typeArg: string,
+  args: FromNormalizedAmountArgs,
+) {
+  return tx.moveCall({
+    target: `${PUBLISHED_AT}::factory::from_normalized_amount`,
+    typeArguments: [typeArg],
+    arguments: [obj(tx, args.factory), pure(tx, args.amount, `u64`)],
+  });
+}
+
 export function borrowCap(
   tx: Transaction,
   typeArg: string,
@@ -486,7 +608,7 @@ export function borrowCapMut(
   });
 }
 
-export interface BurnArgs {
+export interface Burn_Args {
   factory: TransactionObjectInput;
   config: TransactionObjectInput;
   bucketProtocol: TransactionObjectInput;
@@ -498,13 +620,13 @@ export interface BurnArgs {
   yourStableCoin: TransactionObjectInput;
 }
 
-export function burn(
+export function burn_(
   tx: Transaction,
   typeArgs: [string, string],
-  args: BurnArgs,
+  args: Burn_Args,
 ) {
   return tx.moveCall({
-    target: `${PUBLISHED_AT}::factory::burn`,
+    target: `${PUBLISHED_AT}::factory::burn_`,
     typeArguments: typeArgs,
     arguments: [
       obj(tx, args.factory),

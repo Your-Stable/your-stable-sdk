@@ -23,7 +23,7 @@ export function loadSigner() {
 
 async function main() {
   const yourStableCoinType =
-    "0x85b4ecaa1d0e8f5289044b8a0721d94d802af20350c71cc4e903f26958e7c82d::up_usd::UP_USD";
+    "0x5de877a152233bdd59c7269e2b710376ca271671e9dd11076b1ff261b2fd113c::up_usd::UP_USD";
 
   const suiClient = new SuiClient({ url: getFullnodeUrl("mainnet") });
 
@@ -37,15 +37,15 @@ async function main() {
   logger.info({ factory });
 
   // add referch function to sync the latest state
-  await factory.updateFactory();
+  await factory.refetchFactory();
 
-  logger.info(await factory.getRewardsBuckAmount());
-  logger.info(await factory.getRewardsSTSBuckAmount());
-  logger.info(factory.getYourStableBasicSupply());
-  logger.info(factory.getYourStableTotalSupply());
   logger.info(factory.getUnderlyingSTSBUCKBalance());
   logger.info(await factory.getUnderlyingSTSBuckReserve());
-  logger.info(factory.getYourStableExtensionSupplies());
+  // logger.info(await factory.getRewardsBuckAmount());
+  // logger.info(await factory.getRewardsSTSBuckAmount());
+  // logger.info(factory.getYourStableBasicSupply());
+  // logger.info(factory.getYourStableTotalSupply());
+  // logger.info(factory.getYourStableExtensionSupplies());
 }
 
 main().catch(logger.error);

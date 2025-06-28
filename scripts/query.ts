@@ -41,11 +41,11 @@ async function main() {
 
   logger.info(factory.getUnderlyingSTSBUCKBalance());
   logger.info(await factory.getUnderlyingSTSBuckReserve());
-  // logger.info(await factory.getRewardsBuckAmount());
-  // logger.info(await factory.getRewardsSTSBuckAmount());
-  // logger.info(factory.getYourStableBasicSupply());
-  // logger.info(factory.getYourStableTotalSupply());
-  // logger.info(factory.getYourStableExtensionSupplies());
+  logger.info(await factory.getRewardsBuckAmount());
+  logger.info(await factory.getRewardsSTSBuckAmount());
+  logger.info(factory.getYourStableBasicSupply());
+  logger.info(factory.getYourStableTotalSupply());
+  logger.info(factory.getYourStableExtensionSupplies());
 }
 
 main().catch(logger.error);

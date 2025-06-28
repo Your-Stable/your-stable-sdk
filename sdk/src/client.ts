@@ -154,9 +154,12 @@ export class YourStableClient {
   }
 
   async getUnderlyingSTSBuckReserve() {
+    const scaling = BigInt(
+      10 ** (YourStableClient.underlyingDecimal - this.factory.decimals),
+    );
     return YourStableClient.getQuotedStSBuckAmountByStableCoinAmount(
       this.client,
-      this.factory.basicSupply.supply,
+      this.factory.basicSupply.supply * scaling,
     );
   }
 

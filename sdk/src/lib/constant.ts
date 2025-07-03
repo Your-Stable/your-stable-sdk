@@ -19,8 +19,13 @@ export const CONFIG_SHARED_OBJECT_REF = {
 
 export type SUPPORTED_REDEMPTION_COIN = "USDC";
 
-export const COIN_TYPE_LIST: Record<SUPPORTED_REDEMPTION_COIN, string> = {
+export type COIN = "USDC" | "BUCK" | "ST_SBUCK";
+
+export const COIN_TYPE_LIST: Record<COIN, string> = {
   USDC: "0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC",
+  BUCK: "0xce7ff77a83ea0cb6fd39bd8748e2ec89a3f41e8efdc3f4eb123e0ca37b184db2::buck::BUCK",
+  ST_SBUCK:
+    "0xd01d27939064d79e4ae1179cd11cfeeff23943f32b1a842ea1a1e15a0045d77d::st_sbuck::ST_SBUCK",
 };
 export const REDEMPTION_QUEUE: Record<
   SUPPORTED_REDEMPTION_COIN,

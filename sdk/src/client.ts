@@ -19,6 +19,7 @@ import {
 } from "./lib/constant";
 import { getLatestPackageId } from "./utils/package";
 import { setPublishedAt } from "./_generated/your-stable";
+import { PUBLISHED_AT as SAVING_VAULT_PUBLISHED_AT } from "./_generated/_dependencies/source/0x2a721777dc1fcf7cda19492ad7c2272ee284214652bde3e9740e2f49c3bff457";
 import {
   burn,
   burnAndRedeem,
@@ -45,7 +46,7 @@ import {
   create,
   getTickets,
 } from "./_generated/your-stable/redemption-queue/functions";
-import { normalizeStructTag } from "@mysten/sui/utils";
+import { normalizeStructTag, SUI_FRAMEWORK_ADDRESS } from "@mysten/sui/utils";
 import { RedemptionTicketInfo } from "./_generated/your-stable/redemption-queue/structs";
 
 export class YourStableClient {
@@ -417,7 +418,7 @@ export class YourStableClient {
   }
 
   // --> admin
-  claimRewardMoveCall(tx: Transaction) {
+  claimRewardMoveCall(tx: Transaction, isBuck: boolean = true) {
     const stSbuckCoin = claimReward(tx, this.factory.$typeArgs[0], {
       factory: tx.object(this.factory.id),
       config: tx.sharedObjectRef(CONFIG_SHARED_OBJECT_REF),
@@ -425,7 +426,50 @@ export class YourStableClient {
       clock: tx.object.clock(),
     });
 
-    return stSbuckCoin;
+    return isBuck ? this.redeemSTSBUCKMoveCalls(tx, stSbuckCoin) : stSbuckCoin;
+  }
+
+  private redeemSTSBUCKMoveCalls(
+    tx: Transaction,
+    stSbuckCoin: TransactionArgument,
+  ) {
+    const stSbuckBalance = tx.moveCall({
+      target: `${SUI_FRAMEWORK_ADDRESS}::coin::into_balance`,
+      typeArguments: [COIN_TYPE_LIST.ST_SBUCK],
+      arguments: [stSbuckCoin],
+    });
+    const ticket = tx.moveCall({
+      target: `${SAVING_VAULT_PUBLISHED_AT}::vault::withdraw`,
+      typeArguments: [COIN_TYPE_LIST.BUCK, COIN_TYPE_LIST.ST_SBUCK],
+      arguments: [
+        tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF),
+        stSbuckBalance,
+        tx.object.clock(),
+      ],
+    });
+    tx.moveCall({
+      target: `${SAVING_VAULT_PUBLISHED_AT}::sbuck_saving_vault::withdraw_v1`,
+      arguments: [
+        tx.sharedObjectRef(SAVING_VAULT_STRATEGY_SHARED_OBJECT_REF),
+        tx.sharedObjectRef(BUCKET_PROTOCOL_SHARED_OBJECT_REF),
+        tx.sharedObjectRef(FOUNTAIN_SHARED_OBJECT_REF),
+        tx.sharedObjectRef(FLASK_SHARED_OBJECT_REF),
+        ticket,
+        tx.object.clock(),
+      ],
+    });
+    const buckBalance = tx.moveCall({
+      target: `${SAVING_VAULT_PUBLISHED_AT}::vault::redeem_withdraw_ticket`,
+      typeArguments: [COIN_TYPE_LIST.BUCK, COIN_TYPE_LIST.ST_SBUCK],
+      arguments: [tx.sharedObjectRef(ST_SBUCK_VAULT_SHARED_OBJECT_REF), ticket],
+    });
+    const buckCoin = tx.moveCall({
+      target: `${SUI_FRAMEWORK_ADDRESS}::coin::from_balance`,
+      typeArguments: [COIN_TYPE_LIST.BUCK],
+      arguments: [buckBalance],
+    });
+
+    return buckCoin;
   }
 
   updateMetadataMoveCall(

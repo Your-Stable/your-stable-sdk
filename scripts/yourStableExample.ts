@@ -8,7 +8,7 @@ import {
 } from "your-stable-sdk";
 import { loadSigner, logger } from ".";
 import { getInputCoins } from "./utils";
-import { Factory } from "your-stable-sdk/_generated/your-stable/factory/structs";
+import { Factory } from "your-stable-sdk/_generated/factory/structs.js";
 
 const suiClient = new SuiClient({ url: getFullnodeUrl("mainnet") });
 
@@ -214,7 +214,7 @@ export async function claimReward() {
   const signer = loadSigner();
 
   const yourStableCoinType =
-    "0x26c842736665d461bd9a73c7a11ac69d64ec14015fdb5fd8f3c04c881a993f6a::jusd::JUSD";
+    "0x5de877a152233bdd59c7269e2b710376ca271671e9dd11076b1ff261b2fd113c::up_usd::UP_USD";
 
   const factory = await YourStableClient.initialize(
     suiClient,
@@ -226,14 +226,13 @@ export async function claimReward() {
   tx.transferObjects([stsBuckCoin], signer.toSuiAddress());
 
   const dryRunResponse = await dryRun(suiClient, tx, signer.toSuiAddress());
-
+  logger.info({ status: dryRunResponse.dryrunRes.effects.status.status });
   if (dryRunResponse.dryrunRes.effects.status.status === "success") {
-    //execute transaction if it's proper
+    // execute transaction if it's proper
     const response = await suiClient.signAndExecuteTransaction({
       transaction: tx,
       signer,
     });
-
     logger.info({ response });
   } else {
     logger.error(dryRunResponse.dryrunRes.effects.status.error);
@@ -376,4 +375,4 @@ async function getYourStableFactory() {
   });
 }
 
-getYourStableFactory().catch(logger.error);
+claimReward().catch(console.error);

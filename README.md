@@ -146,8 +146,8 @@ async function burnYourStable() {
     BigInt(burnedAmount),
   );
   
-  // Burn and receive USDC
-  const buckCoin = factory.burnYourStableMoveCall(tx, yourStableCoin, "USDC");
+  // Burn and receive BUCK
+  const buckCoin = factory.burnYourStableMoveCall(tx, yourStableCoin);
 
   tx.transferObjects([buckCoin], signer.toSuiAddress());
 

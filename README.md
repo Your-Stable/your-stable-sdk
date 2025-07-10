@@ -171,7 +171,9 @@ async function claimReward() {
   );
 
   const tx = new Transaction();
-  const stsBuckCoin = factory.claimRewardMoveCall(tx);
+  const isBuck = true
+  // can choose to claim the reward in BUCK token rather than ST_SBUCK, default to BUCK
+  const stsBuckCoin = factory.claimRewardMoveCall(tx, isBuck);
   tx.transferObjects([stsBuckCoin], signer.toSuiAddress());
 
   const response = await suiClient.signAndExecuteTransaction({
